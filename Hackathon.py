@@ -48,12 +48,8 @@ TEXT = {
         "invalid_age": "Please reply with your age using numbers only, for example: 24",
         "invalid_week": "Please reply with your pregnancy week using numbers only. If unknown, reply 0.",
         "invalid_yes_no": "Please reply with 1 for Yes or 2 for No.",
-        "help_before_registration": "To begin your assessment, please complete registration first.",
-        "assessment_in_progress": "Your assessment is in progress. Please continue answering with numbers only.",
         "deleted": "Your data has been removed from Aya. If you message again, a new record will be created.",
-        "restart_msg": "Starting a new assessment.",
         "status_incomplete": "Your assessment is still in progress. Please continue answering the questions with numbers only.",
-        "status_complete": "Your latest assessment is complete.",
         "q1": (
             "Q1. Are you experiencing any of these danger signs: heavy bleeding, fits/seizures, or blurred vision?\n"
             "Reply:\n1. Yes\n2. No"
@@ -83,6 +79,8 @@ TEXT = {
         "reassess_prompt": "Reply HELP at any time to take another assessment.",
         "next_due": "Your next routine assessment is due on {date}.",
         "help_complete": "Reply HELP to start a new assessment.",
+        "location_saved": "Your location has been shared with the clinic.",
+        "location_failed": "Aya could not save your location.",
     },
     "pidgin": {
         "language_prompt": (
@@ -100,12 +98,8 @@ TEXT = {
         "invalid_age": "Abeg reply your age with number only, example: 24",
         "invalid_week": "Abeg reply your pregnancy week with number only. If you no know am, reply 0.",
         "invalid_yes_no": "Abeg reply 1 for Yes or 2 for No.",
-        "help_before_registration": "To begin assessment, first finish registration.",
-        "assessment_in_progress": "Your assessment still dey go on. Abeg continue to answer with number only.",
         "deleted": "Aya don remove your data. If you message again, we go create new record.",
-        "restart_msg": "We don start new assessment.",
-        "status_incomplete": "Your assessment never finish. Abeg continue answer the questions with number only.",
-        "status_complete": "Your latest assessment don complete.",
+        "status_incomplete": "Your assessment still dey go on. Abeg continue to answer with number only.",
         "q1": "Q1. You dey get any danger sign like heavy bleeding, fits/seizures, or blurred vision?\nReply:\n1. Yes\n2. No",
         "q2": "Q2. You get strong constant headache?\nReply:\n1. Yes\n2. No",
         "q3": "Q3. You get fever or chills?\nReply:\n1. Yes\n2. No",
@@ -123,6 +117,8 @@ TEXT = {
         "reassess_prompt": "Reply HELP anytime to take another assessment.",
         "next_due": "Your next routine assessment dey due on {date}.",
         "help_complete": "Reply HELP to start another assessment.",
+        "location_saved": "Clinic don receive your location.",
+        "location_failed": "Aya no fit save your location.",
     },
     "ha": {
         "language_prompt": (
@@ -140,12 +136,8 @@ TEXT = {
         "invalid_age": "Da fatan a turo shekarunki da lambobi kaɗai, misali: 24",
         "invalid_week": "Da fatan a turo makon ciki da lambobi kaɗai. Idan ba ki sani ba, ki turo 0.",
         "invalid_yes_no": "Da fatan a amsa da 1 don Eh ko 2 don A'a.",
-        "help_before_registration": "Don fara tantancewa, da farko ki kammala rajista.",
-        "assessment_in_progress": "Tantancewarki na gudana. Da fatan ki ci gaba da amsawa da lambobi kaɗai.",
         "deleted": "An cire bayananki daga Aya. Idan kika sake yin saƙo, za a ƙirƙiri sabon bayaninki.",
-        "restart_msg": "An fara sabon tantancewa.",
-        "status_incomplete": "Tantancewarki ba ta kammala ba tukuna. Ki ci gaba da amsa tambayoyin da lambobi kaɗai.",
-        "status_complete": "An kammala tantancewarki ta ƙarshe.",
+        "status_incomplete": "Tantancewarki na gudana. Da fatan ki ci gaba da amsawa da lambobi kaɗai.",
         "q1": "Q1. Kina da wata alamar haɗari kamar zubar jini mai yawa, farfaɗiya, ko gani ya dusashe?\nAmsa:\n1. Eh\n2. A'a",
         "q2": "Q2. Kina da matsanancin ciwon kai mai dorewa?\nAmsa:\n1. Eh\n2. A'a",
         "q3": "Q3. Kina da zazzabi ko sanyi?\nAmsa:\n1. Eh\n2. A'a",
@@ -163,6 +155,8 @@ TEXT = {
         "reassess_prompt": "A turo HELP a kowane lokaci don sake yin tantancewa.",
         "next_due": "Lokacin tantancewa ta gaba zai yi ranar {date}.",
         "help_complete": "A turo HELP don fara sabon tantancewa.",
+        "location_saved": "An aika wurin da kike zuwa asibiti.",
+        "location_failed": "Aya ba ta iya adana wurin da kike ba.",
     },
     "yo": {
         "language_prompt": (
@@ -180,12 +174,8 @@ TEXT = {
         "invalid_age": "Jowo fi ori re ranse pelu nomba nikan, apere: 24",
         "invalid_week": "Jowo fi ose oyun re ranse pelu nomba nikan. Ti o ko ba mo, fi 0 ranse.",
         "invalid_yes_no": "Jowo fi 1 fun Beni tabi 2 fun Beeko.",
-        "help_before_registration": "Lati bere ayewo, jowo ko pari iforuko sile tele.",
-        "assessment_in_progress": "Ayewo re n lo lowo. Jowo tesiwaju lati dahun pelu nomba nikan.",
         "deleted": "A ti pa data re nu kuro ninu Aya. Ti o ba tun fi ifiranse ranse, a o da akosile tuntun sile.",
-        "restart_msg": "A ti bere ayewo tuntun.",
-        "status_incomplete": "Ayewo re ko tii pari. Jowo tesiwaju lati dahun awon ibeere pelu nomba nikan.",
-        "status_complete": "Ayewo to kẹhin ti pari.",
+        "status_incomplete": "Ayewo re n lo lowo. Jowo tesiwaju lati dahun pelu nomba nikan.",
         "q1": "Q1. Se o n ni eyikeyi awon ami ewu wonyi: eje pupo, seizure, tabi iran to dinku?\nDahun:\n1. Beni\n2. Beeko",
         "q2": "Q2. Se o n ni efori to lagbara ti ko n lo?\nDahun:\n1. Beni\n2. Beeko",
         "q3": "Q3. Se o ni iba tabi otutu inu ara?\nDahun:\n1. Beni\n2. Beeko",
@@ -203,6 +193,8 @@ TEXT = {
         "reassess_prompt": "Fi HELP ranse nigbakugba lati tun se ayewo.",
         "next_due": "Ayewo deede to tele ye ni ojo {date}.",
         "help_complete": "Fi HELP ranse lati bere ayewo tuntun.",
+        "location_saved": "A ti fi ipo re ranse si ile-iwosan.",
+        "location_failed": "Aya ko le fi ipo re pamọ.",
     },
     "ig": {
         "language_prompt": (
@@ -220,12 +212,8 @@ TEXT = {
         "invalid_age": "Biko ziga afọ gị site na nọmba naanị, dịka: 24",
         "invalid_week": "Biko ziga izu ime gị site na nọmba naanị. Ọ bụrụ na ị maghị, ziga 0.",
         "invalid_yes_no": "Biko zaa 1 maka Ee ma ọ bụ 2 maka Mba.",
-        "help_before_registration": "Iji malite nyocha, biko mezue ndebanye aha mbụ.",
-        "assessment_in_progress": "Nyocha gị ka na-aga. Biko gaa n'ihu na-aza site na nọmba naanị.",
         "deleted": "E wepụrụ data gị na Aya. Ọ bụrụ na ị ziga ozi ọzọ, a ga-emepụta ndekọ ọhụrụ.",
-        "restart_msg": "A malitela nyocha ọhụrụ.",
-        "status_incomplete": "Nyocha gị agwụbeghị. Biko gaa n'ihu na-aza ajụjụ ndị ahụ site na nọmba naanị.",
-        "status_complete": "Nyocha ikpeazụ gị agwụla.",
+        "status_incomplete": "Nyocha gị ka na-aga. Biko gaa n'ihu na-aza site na nọmba naanị.",
         "q1": "Q1. Ị na-enwe otu n'ime ihe ize ndụ ndị a: ọbara ọgbụgba ukwuu, seizure, ma ọ bụ anya na-adịghị ahụ nke ọma?\nZaa:\n1. Ee\n2. Mba",
         "q2": "Q2. Ị na-enwe isi ọwụwa siri ike na-adịgide?\nZaa:\n1. Ee\n2. Mba",
         "q3": "Q3. Ị nwere fever ma ọ bụ chills?\nZaa:\n1. Ee\n2. Mba",
@@ -243,6 +231,8 @@ TEXT = {
         "reassess_prompt": "Zipu HELP oge ọ bụla iji mee nyocha ọzọ.",
         "next_due": "Nyocha nkịtị na-esote gị ga-abụ na {date}.",
         "help_complete": "Zipu HELP iji malite nyocha ọhụrụ.",
+        "location_saved": "Ekesara ụlọ ọgwụ ọnọdụ gị.",
+        "location_failed": "Aya enweghị ike ịchekwa ọnọdụ gị.",
     },
 }
 
@@ -342,7 +332,7 @@ def create_patient(phone: str) -> dict:
         "language": None,
         "age": None,
         "pregnancy_week": None,
-        "status": "awaiting_language",   # awaiting_language -> registering_age -> registering_week -> triage -> completed
+        "status": "awaiting_language",
         "current_question": "language",
         "score": 0,
         "risk": "green",
@@ -357,6 +347,7 @@ def create_patient(phone: str) -> dict:
         "completed": False,
         "last_completed_at": None,
         "next_assessment_due": None,
+        "location": None,
     }
     patients[phone] = patient
     return patient
@@ -388,6 +379,7 @@ def clinic_row(patient: dict) -> dict:
         "last_completed_at": patient["last_completed_at"],
         "next_assessment_due": patient["next_assessment_due"],
         "answers": patient["answers"],
+        "location": patient["location"],
     }
 
 def parse_yes_no_number(text: str):
@@ -436,6 +428,7 @@ def restart_assessment(patient: dict, keep_registration=True):
     patient["answers"] = {}
     patient["completed"] = False
     patient["updated_at"] = now_iso()
+    patient["location"] = None
     if not keep_registration:
         patient["language"] = None
         patient["age"] = None
@@ -467,6 +460,10 @@ def assessment_complete_reply(patient):
     due_text = tr(patient, "next_due", date=format_due_date(patient["next_assessment_due"]))
     return f"{patient['patient_message']}\n\n{due_text}\n{tr(patient, 'help_complete')}"
 
+def patient_message_deleted(patient):
+    lang = patient.get("language", "en") if patient else "en"
+    return TEXT.get(lang, TEXT["en"]).get("deleted", TEXT["en"]["deleted"])
+
 # ---------------------------------
 # Main processing
 # ---------------------------------
@@ -475,15 +472,13 @@ def process_message(patient: dict, incoming_text: str) -> str:
     patient["last_message"] = incoming_text
     patient["updated_at"] = now_iso()
 
-    # Global delete
     if text == "delete me":
         delete_patient(patient["phone"])
         return patient_message_deleted(patient)
 
-    # If brand new / no language selected yet, first user message should trigger language selection
+    # first patient message triggers language prompt
     if patient["status"] == "awaiting_language" and patient["current_question"] == "language":
         if patient["language"] is None:
-            # If they actually answered 1-5 on first message, accept it
             if text in LANGUAGES:
                 patient["language"] = LANGUAGES[text]
                 patient["status"] = "registering_age"
@@ -492,7 +487,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
                 return tr(patient, "registration_age")
             return TEXT["en"]["language_prompt"]
 
-    # HELP starts assessment at any point
     if text == "help":
         if patient.get("language") is None:
             patient["status"] = "awaiting_language"
@@ -510,7 +504,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
         restart_assessment(patient, keep_registration=True)
         return qtext(patient, "q1")
 
-    # Restart keeps registration if present
     if text == "restart":
         if patient.get("language") and patient.get("age") is not None:
             restart_assessment(patient, keep_registration=True)
@@ -519,13 +512,11 @@ def process_message(patient: dict, incoming_text: str) -> str:
         patient["current_question"] = "language"
         return TEXT["en"]["language_prompt"]
 
-    # Status command
     if text == "status":
         if patient["completed"]:
             return assessment_complete_reply(patient)
         return tr(patient, "status_incomplete")
 
-    # Language selection stage
     if patient["status"] == "awaiting_language":
         if text not in LANGUAGES:
             return TEXT["en"]["language_invalid"]
@@ -535,7 +526,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
         patient["updated_at"] = now_iso()
         return tr(patient, "registration_age")
 
-    # Registration age
     if patient["status"] == "registering_age":
         age = parse_age(text)
         if age is None:
@@ -546,7 +536,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
         patient["updated_at"] = now_iso()
         return tr(patient, "registration_week")
 
-    # Registration week
     if patient["status"] == "registering_week":
         week = parse_week(text)
         if week is None:
@@ -557,11 +546,9 @@ def process_message(patient: dict, incoming_text: str) -> str:
         patient["updated_at"] = now_iso()
         return qtext(patient, "q1")
 
-    # Completed
     if patient["completed"]:
         return assessment_complete_reply(patient)
 
-    # Triage
     if patient["status"] == "triage":
         qid = patient["current_question"]
         yes = parse_yes_no_number(text)
@@ -570,7 +557,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
 
         apply_question_answer(patient, qid, yes)
 
-        # Immediate red at q1
         if qid == "q1" and yes:
             complete_assessment(patient)
             patient["risk"] = "red"
@@ -579,7 +565,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
             patient["patient_message"] = patient_message_from_risk(patient, "red")
             return assessment_complete_reply(patient)
 
-        # Any score >=5 ends immediately
         if patient["score"] >= 5:
             complete_assessment(patient)
             return assessment_complete_reply(patient)
@@ -594,10 +579,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
         return qtext(patient, next_q)
 
     return "Something went wrong. Reply HELP to begin again."
-
-def patient_message_deleted(patient):
-    lang = patient.get("language", "en") if patient else "en"
-    return TEXT.get(lang, TEXT["en"]).get("deleted", TEXT["en"]["deleted"])
 
 # ---------------------------------
 # Demo HTML
@@ -686,20 +667,16 @@ DEMO_HTML = """
             cursor: pointer;
             font-weight: bold;
         }
+        .share-location {
+            background: #d62828 !important;
+            width: 100%;
+        }
         .panel {
-            width: 420px;
+            width: 430px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 12px 32px rgba(0,0,0,0.14);
             padding: 20px;
-        }
-        .state {
-            margin-top: 16px;
-            padding: 14px;
-            border-radius: 12px;
-            background: #f5f2fb;
-            line-height: 1.6;
-            font-size: 14px;
         }
         .controls input {
             width: 100%;
@@ -709,6 +686,14 @@ DEMO_HTML = """
             border-radius: 10px;
             border: 1px solid #ccc;
         }
+        .state {
+            margin-top: 16px;
+            padding: 14px;
+            border-radius: 12px;
+            background: #f5f2fb;
+            line-height: 1.6;
+            font-size: 14px;
+        }
         .badge {
             display: inline-block;
             padding: 4px 8px;
@@ -717,6 +702,14 @@ DEMO_HTML = """
             font-size: 12px;
             margin: 4px 4px 0 0;
         }
+        #locationBox {
+            margin-top: 16px;
+            display: none;
+        }
+        .muted {
+            color: #666;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -724,7 +717,7 @@ DEMO_HTML = """
         <div class="phone">
             <div class="header">Aya - Antenatal Companion</div>
             <div id="chat" class="chat">
-                <div class="bubble bot">Patient sends the first message. Try: hello</div>
+                <div class="bubble bot">Patient sends the first message to begin.</div>
             </div>
             <div class="input-row">
                 <input id="messageInput" type="text" placeholder="Type message..." />
@@ -733,19 +726,19 @@ DEMO_HTML = """
         </div>
 
         <div class="panel">
-            <h3>Simulation Controls</h3>
             <div class="controls">
                 <label><strong>Patient phone number</strong></label>
                 <input id="phoneInput" type="text" value="+447700900123" />
-                <button onclick="quickSend('hello')">Send first message</button>
-                <button onclick="quickSend('1')">Send 1</button>
-                <button onclick="quickSend('2')">Send 2</button>
-                <button onclick="quickSend('24')">Send 24</button>
-                <button onclick="quickSend('30')">Send 30</button>
-                <button onclick="quickSend('help')">HELP</button>
-                <button onclick="quickSend('delete me')">Delete Me</button>
             </div>
+
             <div id="state" class="state">No patient state loaded yet.</div>
+
+            <div id="locationBox">
+                <button class="share-location" onclick="shareLocation()">Share Emergency Location</button>
+                <div class="muted" style="margin-top:8px;">
+                    This only appears for completed emergency cases.
+                </div>
+            </div>
         </div>
     </div>
 
@@ -761,13 +754,19 @@ DEMO_HTML = """
 
         function renderState(patient) {
             const state = document.getElementById("state");
+            const locationBox = document.getElementById("locationBox");
+
             if (!patient) {
                 state.innerHTML = "Patient not found.";
+                locationBox.style.display = "none";
                 return;
             }
 
             const symptoms = (patient.symptoms || []).map(s => `<span class="badge">${s}</span>`).join("");
             const riskFactors = (patient.risk_factors || []).map(s => `<span class="badge">${s}</span>`).join("");
+            const location = patient.location
+                ? `${patient.location.latitude}, ${patient.location.longitude} (${patient.location.timestamp})`
+                : "Not shared";
 
             state.innerHTML = `
                 <strong>Phone:</strong> ${patient.phone}<br>
@@ -779,16 +778,23 @@ DEMO_HTML = """
                 <strong>Score:</strong> ${patient.score}<br>
                 <strong>Risk:</strong> ${patient.risk.toUpperCase()}<br>
                 <strong>Required response:</strong> ${patient.required_response}<br>
-                <strong>Next due:</strong> ${patient.next_assessment_due ?? "Not set"}<br><br>
+                <strong>Next due:</strong> ${patient.next_assessment_due ?? "Not set"}<br>
+                <strong>Location:</strong> ${location}<br><br>
                 <strong>Symptoms:</strong><br>${symptoms || "None"}<br><br>
                 <strong>Risk factors:</strong><br>${riskFactors || "None"}
             `;
+
+            if (patient.risk === "red" && patient.completed) {
+                locationBox.style.display = "block";
+            } else {
+                locationBox.style.display = "none";
+            }
         }
 
-        async function sendMessage(customText = null) {
+        async function sendMessage() {
             const phone = document.getElementById("phoneInput").value.trim();
             const input = document.getElementById("messageInput");
-            const text = customText || input.value.trim();
+            const text = input.value.trim();
 
             if (!text) return;
 
@@ -806,101 +812,45 @@ DEMO_HTML = """
             renderState(data.patient);
         }
 
-        function quickSend(text) {
-            sendMessage(text);
+        async function shareLocation() {
+            const phone = document.getElementById("phoneInput").value.trim();
+
+            if (!navigator.geolocation) {
+                addBubble("This browser does not support location sharing.", "bot");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const response = await fetch("/api/share-location", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            phone: phone,
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data.message) {
+                        addBubble(data.message, "bot");
+                    } else if (data.error) {
+                        addBubble(data.error, "bot");
+                    }
+
+                    renderState(data.patient || null);
+                },
+                () => {
+                    addBubble("Location permission was denied or unavailable.", "bot");
+                }
+            );
         }
 
         document.getElementById("messageInput").addEventListener("keypress", function(e) {
             if (e.key === "Enter") sendMessage();
         });
-    </script>
-</body>
-</html>
-"""
-
-# ---------------------------------
-# Clinic dashboard
-# ---------------------------------
-CLINIC_HTML = """
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Aya Clinic Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f7f7fb; }
-        .wrap { max-width: 1200px; margin: 0 auto; padding: 24px; }
-        h1 { margin-bottom: 8px; }
-        .sub { color: #555; margin-bottom: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-        .card {
-            background: white; border-radius: 16px; padding: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        }
-        .red { border-left: 6px solid #d62828; }
-        .yellow { border-left: 6px solid #e9b100; }
-        .green { border-left: 6px solid #2a9d55; }
-        .pill {
-            display: inline-block; padding: 4px 8px; border-radius: 999px;
-            background: #eee; font-size: 12px; margin: 4px 4px 0 0;
-        }
-        .muted { color: #555; font-size: 14px; }
-        button {
-            background: #6d35b1; color: white; border: none; border-radius: 10px;
-            padding: 10px 14px; cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <div class="wrap">
-        <h1>Aya Clinic Dashboard</h1>
-        <div class="sub">View-only clinic dashboard showing patients, risk, symptoms, response required, and next due date.</div>
-        <button onclick="loadPatients()">Refresh</button>
-        <div style="height:16px;"></div>
-        <div id="grid" class="grid"></div>
-    </div>
-
-    <script>
-        function cardClass(risk) {
-            if (risk === "red") return "card red";
-            if (risk === "yellow") return "card yellow";
-            return "card green";
-        }
-
-        function pillList(items) {
-            if (!items || items.length === 0) return "None";
-            return items.map(x => `<span class="pill">${x}</span>`).join("");
-        }
-
-        async function loadPatients() {
-            const res = await fetch("/api/patients");
-            const data = await res.json();
-            const grid = document.getElementById("grid");
-
-            if (!data.patients || data.patients.length === 0) {
-                grid.innerHTML = '<div class="card">No patients yet.</div>';
-                return;
-            }
-
-            grid.innerHTML = data.patients.map(p => `
-                <div class="${cardClass(p.risk)}">
-                    <h3>${(p.risk || "").toUpperCase()} risk</h3>
-                    <div><strong>Phone:</strong> ${p.phone}</div>
-                    <div><strong>Language:</strong> ${p.language}</div>
-                    <div><strong>Age:</strong> ${p.age ?? "Not set"}</div>
-                    <div><strong>Pregnancy week:</strong> ${p.pregnancy_week ?? "Unknown"}</div>
-                    <div><strong>Score:</strong> ${p.score}</div>
-                    <div><strong>Required response:</strong> ${p.required_response}</div>
-                    <div><strong>Status:</strong> ${p.status}</div>
-                    <div><strong>Next assessment due:</strong> ${p.next_assessment_due ?? "Not set"}</div>
-                    <div class="muted"><strong>Updated:</strong> ${p.updated_at}</div>
-                    <div style="margin-top:10px;"><strong>Symptoms:</strong><br>${pillList(p.symptoms)}</div>
-                    <div style="margin-top:10px;"><strong>Risk factors:</strong><br>${pillList(p.risk_factors)}</div>
-                </div>
-            `).join("");
-        }
-
-        loadPatients();
     </script>
 </body>
 </html>
@@ -918,6 +868,7 @@ def home():
         "/clinic-dashboard - clinic-facing dashboard<br>"
         "/api/patients - patient JSON for clinic dashboard<br>"
         "/api/patient/&lt;phone&gt; - single patient JSON<br>"
+        "/api/share-location - POST emergency location from simulation<br>"
         "/sms - Twilio webhook<br>"
         "/health - health check"
     )
@@ -958,6 +909,40 @@ def api_patient(phone):
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
     return jsonify(clinic_row(patient))
+
+@app.route("/api/share-location", methods=["POST"])
+def api_share_location():
+    data = request.get_json() or {}
+    phone = str(data.get("phone", ""))
+    latitude = data.get("latitude")
+    longitude = data.get("longitude")
+
+    patient = patients.get(phone)
+    if not patient:
+        return jsonify({"error": "Patient not found"}), 404
+
+    if patient.get("risk") != "red" or not patient.get("completed"):
+        return jsonify({
+            "error": "Location sharing is only enabled for completed red-risk cases in the simulation."
+        }), 400
+
+    try:
+        lat = float(latitude)
+        lon = float(longitude)
+    except (TypeError, ValueError):
+        return jsonify({"error": "Invalid coordinates"}), 400
+
+    patient["location"] = {
+        "latitude": lat,
+        "longitude": lon,
+        "timestamp": now_iso(),
+    }
+    patient["updated_at"] = now_iso()
+
+    return jsonify({
+        "message": tr(patient, "location_saved"),
+        "patient": clinic_row(patient),
+    })
 
 @app.route("/simulate-sms", methods=["POST"])
 def simulate_sms():

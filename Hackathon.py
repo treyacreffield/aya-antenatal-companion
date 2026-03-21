@@ -1179,7 +1179,7 @@ CLINIC_HTML = """
 
             <div class="stats">
                 <div class="stat">
-                    <div class="label">Total Patients</div>
+                    <div class="label">Patients</div>
                     <div class="value" id="statTotal">0</div>
                 </div>
                 <div class="stat">
@@ -1202,7 +1202,7 @@ CLINIC_HTML = """
             </div>
 
             <div class="card">
-                <h3>10 Hardcoded Patients</h3>
+                <h3>Patients</h3>
                 <table>
                     <thead>
                         <tr>
@@ -1210,11 +1210,47 @@ CLINIC_HTML = """
                             <th>Age / Week</th>
                             <th>Risk</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th>Response</th>
                         </tr>
                     </thead>
                     <tbody id="patientsTable"></tbody>
                 </table>
+            </div>
+            <div class="card">
+                <h3>Available Community Health Workers</h3>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
+                        <div>
+                            <div style="font-weight:700;">Nurse Adaeze</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone A · Lagos</div>
+                        </div>
+                        <span class="pill green">Online</span>
+                    </div>
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
+                        <div>
+                            <div style="font-weight:700;">Midwife Kemi</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone B · Kano</div>
+                        </div>
+                        <span class="pill green">Online</span>
+                    </div>
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
+                        <div>
+                            <div style="font-weight:700;">Dr. Emeka</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone C · Abuja</div>
+                        </div>
+                        <span class="pill yellow">Busy</span>
+                    </div>
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
+                        <div>
+                            <div style="font-weight:700;">CHW Tola</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone A · Ibadan</div>
+                        </div>
+                        <span class="pill green">Online</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1314,6 +1350,50 @@ CLINIC_HTML = """
             `;
         }
 
+        function buildResponseInfo(patient) {
+            const phoneLine = `<div><strong>Phone:</strong> ${patient.phone}</div>`;
+
+            if (patient.risk === "red") {
+                const loc = patient.location
+                    ? `${patient.location.latitude}, ${patient.location.longitude}`
+                    : "Location not shared";
+
+                return `
+                    <div style="font-size:0.74rem;line-height:1.5;">
+                        ${phoneLine}
+                        <div><span class="pill red">Emergency pickup</span></div>
+                        <div><strong>Location:</strong> ${loc}</div>
+                        <div class="row-actions" style="margin-top:6px;">
+                           <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Open</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+           if (patient.risk === "yellow") {
+                return `
+                    <div style="font-size:0.74rem;line-height:1.5;">
+                        ${phoneLine}
+                        <div><span class="pill yellow">Medium risk</span></div>
+                        <div><strong>Response:</strong> Phone call</div>
+                        <div class="row-actions" style="margin-top:6px;">
+                            <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Open</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div style="font-size:0.74rem;line-height:1.5;">
+                    ${phoneLine}
+                    <div><span class="pill green">Routine monitoring</span></div>
+                    <div class="row-actions" style="margin-top:6px;">
+                       <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Open</button>
+                    </div>
+                </div>
+            `;
+        }    
+        
         async function refreshPatients() {
             const response = await fetch("/api/patients");
             const data = await response.json();
@@ -1329,16 +1409,14 @@ CLINIC_HTML = """
 
             patients.forEach(patient => {
                 const tr = document.createElement("tr");
+                const responseInfo = buildResponseInfo(patient);
+
                 tr.innerHTML = `
                     <td>${patient.phone}</td>
                     <td>${patient.age ?? "—"} / ${patient.pregnancy_week ?? "—"}</td>
                     <td>${riskPill(patient.risk)}</td>
                     <td>${patient.status}</td>
-                    <td>
-                        <div class="row-actions">
-                            <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Load</button>
-                        </div>
-                    </td>
+                    <td>${responseInfo}</td>
                 `;
                 tbody.appendChild(tr);
             });

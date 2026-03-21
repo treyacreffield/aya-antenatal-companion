@@ -13,7 +13,6 @@ patients = {}
 
 # ---------------------------------
 # Language config
-# Demo translations - should be reviewed by native speakers for production use
 # ---------------------------------
 LANGUAGES = {
     "1": "en",
@@ -266,11 +265,13 @@ QUESTION_LABELS = {
     "q11": "Age under 18 or over 35",
 }
 
+
 # ---------------------------------
 # Helpers
 # ---------------------------------
 def now_iso():
     return datetime.utcnow().isoformat()
+
 
 def format_due_date(dt_str):
     if not dt_str:
@@ -281,26 +282,31 @@ def format_due_date(dt_str):
     except Exception:
         return dt_str
 
+
 def tr(patient, key, **kwargs):
     lang = patient.get("language", "en")
     template = TEXT.get(lang, TEXT["en"]).get(key, TEXT["en"].get(key, key))
     return template.format(**kwargs)
 
+
 def qtext(patient, qid):
     lang = patient.get("language", "en")
     return TEXT.get(lang, TEXT["en"]).get(qid, TEXT["en"][qid])
 
+
 def twiml_message(text: str) -> Response:
     safe_text = (
         text.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
     )
     xml = f'<?xml version="1.0" encoding="UTF-8"?><Response><Message>{safe_text}</Message></Response>'
     return Response(xml, mimetype="application/xml")
 
+
 def normalise_text(text: str) -> str:
     return (text or "").strip().lower()
+
 
 def risk_from_score(score: int) -> str:
     if score >= 5:
@@ -309,12 +315,14 @@ def risk_from_score(score: int) -> str:
         return "yellow"
     return "green"
 
+
 def required_response_from_risk(risk: str) -> str:
     if risk == "red":
         return "Emergency pickup"
     if risk == "yellow":
         return "Phone call"
     return "Routine monitoring"
+
 
 def patient_message_from_risk(patient, risk: str) -> str:
     if risk == "red":
@@ -323,8 +331,10 @@ def patient_message_from_risk(patient, risk: str) -> str:
         return tr(patient, "patient_yellow")
     return tr(patient, "patient_green")
 
+
 def next_due_date():
     return (datetime.utcnow() + timedelta(days=14)).isoformat()
+
 
 def create_patient(phone: str) -> dict:
     patient = {
@@ -352,14 +362,17 @@ def create_patient(phone: str) -> dict:
     patients[phone] = patient
     return patient
 
+
 def get_or_create_patient(phone: str) -> dict:
     return patients.get(phone) or create_patient(phone)
+
 
 def delete_patient(phone: str) -> bool:
     if phone in patients:
         del patients[phone]
         return True
     return False
+
 
 def clinic_row(patient: dict) -> dict:
     return {
@@ -382,12 +395,14 @@ def clinic_row(patient: dict) -> dict:
         "location": patient["location"],
     }
 
+
 def parse_yes_no_number(text: str):
     if text.strip() == "1":
         return True
     if text.strip() == "2":
         return False
     return None
+
 
 def parse_age(text: str):
     cleaned = text.strip()
@@ -398,6 +413,7 @@ def parse_age(text: str):
         return age
     return None
 
+
 def parse_week(text: str):
     cleaned = text.strip()
     if not cleaned.isdigit():
@@ -407,14 +423,17 @@ def parse_week(text: str):
         return week
     return None
 
+
 def next_question_after(qid: str):
     idx = QUESTION_SEQUENCE.index(qid)
     return QUESTION_SEQUENCE[idx + 1] if idx + 1 < len(QUESTION_SEQUENCE) else None
+
 
 def update_risk(patient: dict):
     patient["risk"] = risk_from_score(patient["score"])
     patient["required_response"] = required_response_from_risk(patient["risk"])
     patient["patient_message"] = patient_message_from_risk(patient, patient["risk"])
+
 
 def restart_assessment(patient: dict, keep_registration=True):
     patient["status"] = "triage" if keep_registration and patient.get("language") and patient.get("age") is not None else "awaiting_language"
@@ -434,6 +453,7 @@ def restart_assessment(patient: dict, keep_registration=True):
         patient["age"] = None
         patient["pregnancy_week"] = None
 
+
 def apply_question_answer(patient: dict, qid: str, yes: bool):
     patient["answers"][qid] = yes
 
@@ -447,6 +467,7 @@ def apply_question_answer(patient: dict, qid: str, yes: bool):
 
     update_risk(patient)
 
+
 def complete_assessment(patient: dict):
     patient["completed"] = True
     patient["status"] = "completed"
@@ -456,13 +477,16 @@ def complete_assessment(patient: dict):
     patient["next_assessment_due"] = next_due_date()
     update_risk(patient)
 
+
 def assessment_complete_reply(patient):
     due_text = tr(patient, "next_due", date=format_due_date(patient["next_assessment_due"]))
     return f"{patient['patient_message']}\n\n{due_text}\n{tr(patient, 'help_complete')}"
 
+
 def patient_message_deleted(patient):
     lang = patient.get("language", "en") if patient else "en"
     return TEXT.get(lang, TEXT["en"]).get("deleted", TEXT["en"]["deleted"])
+
 
 # ---------------------------------
 # Main processing
@@ -476,7 +500,6 @@ def process_message(patient: dict, incoming_text: str) -> str:
         delete_patient(patient["phone"])
         return patient_message_deleted(patient)
 
-    # first patient message triggers language prompt
     if patient["status"] == "awaiting_language" and patient["current_question"] == "language":
         if patient["language"] is None:
             if text in LANGUAGES:
@@ -580,169 +603,643 @@ def process_message(patient: dict, incoming_text: str) -> str:
 
     return "Something went wrong. Reply HELP to begin again."
 
+
 # ---------------------------------
-# Demo HTML
+# Seed 10 hardcoded patients
 # ---------------------------------
-DEMO_HTML = """
+def seed_patient(
+    phone,
+    language="en",
+    age=None,
+    pregnancy_week=None,
+    status="awaiting_language",
+    score=0,
+    symptoms=None,
+    risk_factors=None,
+    answers=None,
+    completed=False,
+    location=None,
+):
+    patient = create_patient(phone)
+    patient["language"] = language
+    patient["age"] = age
+    patient["pregnancy_week"] = pregnancy_week
+    patient["status"] = status
+    patient["score"] = score
+    patient["symptoms"] = symptoms or []
+    patient["risk_factors"] = risk_factors or []
+    patient["answers"] = answers or {}
+    patient["completed"] = completed
+    patient["location"] = location
+    patient["created_at"] = now_iso()
+    patient["updated_at"] = now_iso()
+    patient["last_completed_at"] = now_iso() if completed else None
+    patient["next_assessment_due"] = next_due_date() if completed else None
+
+    if completed:
+        patient["current_question"] = None
+    elif status == "triage":
+        patient["current_question"] = "q1"
+    elif status == "registering_week":
+        patient["current_question"] = "registration_week"
+    elif status == "registering_age":
+        patient["current_question"] = "registration_age"
+    else:
+        patient["current_question"] = "language"
+
+    update_risk(patient)
+    return patient
+
+
+def seed_demo_patients():
+    patients.clear()
+
+    # 4 more "active" demo patients
+    seed_patient("+2347000000001")
+    seed_patient("+2347000000002", language="pidgin", status="registering_age")
+    seed_patient("+2347000000003", language="ha", age=22, status="registering_week")
+    seed_patient(
+        "+2347000000004",
+        language="en",
+        age=31,
+        pregnancy_week=24,
+        status="triage",
+        score=3,
+        symptoms=["Severe constant headache"],
+        answers={"q2": True},
+    )
+
+    # 6 seeded completed patients
+    seed_patient(
+        "+2347000000005",
+        language="en",
+        age=27,
+        pregnancy_week=32,
+        status="completed",
+        score=2,
+        symptoms=["Itchy hands/feet"],
+        completed=True,
+    )
+    seed_patient(
+        "+2347000000006",
+        language="pidgin",
+        age=19,
+        pregnancy_week=16,
+        status="completed",
+        score=4,
+        symptoms=["Fever or chills"],
+        risk_factors=["Age under 18 or over 35"],
+        completed=True,
+    )
+    seed_patient(
+        "+2347000000007",
+        language="ha",
+        age=36,
+        pregnancy_week=28,
+        status="completed",
+        score=6,
+        symptoms=["Reduced fetal movement"],
+        risk_factors=["Age under 18 or over 35", "Hypertension history"],
+        completed=True,
+    )
+    seed_patient(
+        "+2347000000008",
+        language="yo",
+        age=24,
+        pregnancy_week=38,
+        status="completed",
+        score=1,
+        risk_factors=["Previous pre-eclampsia or stillbirth"],
+        completed=True,
+    )
+    seed_patient(
+        "+2347000000009",
+        language="ig",
+        age=41,
+        pregnancy_week=20,
+        status="completed",
+        score=5,
+        symptoms=["Water leaking / fluid breaking"],
+        risk_factors=["Age under 18 or over 35"],
+        completed=True,
+        location={
+            "latitude": 6.5244,
+            "longitude": 3.3792,
+            "timestamp": now_iso(),
+        },
+    )
+    seed_patient(
+        "+2347000000010",
+        language="en",
+        age=29,
+        pregnancy_week=12,
+        status="completed",
+        score=3,
+        symptoms=["Severe pelvic/abdominal pain"],
+        risk_factors=["Diabetes history"],
+        completed=True,
+    )
+
+
+seed_demo_patients()
+
+
+# ---------------------------------
+# Integrated stripped HTML
+# ---------------------------------
+CLINIC_HTML = """
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Aya - Antenatal Companion</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>Aya Antenatal Companion</title>
     <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+            --primary: #153d36;
+            --primary-dark: #0d2820;
+            --primary-light: #2a6b5e;
+            --primary-pale: #e8f2f0;
+            --red: #c0392b;
+            --red-pale: #fdecea;
+            --yellow: #c9880a;
+            --yellow-pale: #fef6e4;
+            --green: #153d36;
+            --green-pale: #e8f2f0;
+            --bg: #f4f8f7;
+            --card: #fff;
+            --border: #c8dbd8;
+            --text: #0d2820;
+            --muted: #4a7a70;
+            --phone-frame: #0d2820;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: #f5f2fb;
-            margin: 0;
-            padding: 24px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--primary-dark);
+            color: #fff;
+            padding: 14px 20px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
         }
-        .page {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-            align-items: flex-start;
+
+        header h1 {
+            font-size: 1rem;
+            font-weight: 800;
         }
-        .phone {
-            width: 370px;
-            background: #fff;
-            border-radius: 28px;
-            border: 8px solid #222;
-            overflow: hidden;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+
+        header p {
+            font-size: 0.75rem;
+            opacity: 0.75;
+            margin-top: 4px;
         }
-        .header {
-            background: #6d35b1;
-            color: white;
+
+        .clock {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 16px;
             padding: 16px;
-            text-align: center;
-            font-weight: bold;
         }
+
+        .phone-wrap {
+            background: var(--phone-frame);
+            border-radius: 24px;
+            padding: 14px;
+        }
+
+        .phone-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7rem;
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .phone-frame {
+            background: #0d1f1c;
+            border-radius: 28px;
+            border: 4px solid #1e4a42;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        .phone-status, .phone-contact, .progress-wrap, .chat-input {
+            padding: 10px 12px;
+        }
+
+        .phone-status {
+            display: flex;
+            justify-content: space-between;
+            background: #08110f;
+            color: #cdd;
+            font-size: 0.7rem;
+        }
+
+        .phone-contact {
+            background: #122b26;
+            border-bottom: 1px solid #1e4a42;
+        }
+
+        .phone-contact .name {
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.82rem;
+        }
+
+        .phone-contact .sub {
+            color: #86b5ad;
+            font-size: 0.66rem;
+            margin-top: 2px;
+        }
+
+        .progress-wrap {
+            background: #0d1f1c;
+            border-bottom: 1px solid #1e4a42;
+        }
+
+        .progress-line {
+            height: 4px;
+            background: #1e4a42;
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-light);
+        }
+
         .chat {
             height: 520px;
             overflow-y: auto;
-            background: #f7f7fb;
-            padding: 16px;
+            background: #091510;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
+
         .bubble {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 18px;
-            line-height: 1.4;
-            font-size: 14px;
+            max-width: 85%;
+            padding: 10px 12px;
+            border-radius: 16px;
+            font-size: 0.78rem;
+            line-height: 1.5;
             white-space: pre-wrap;
+            word-break: break-word;
         }
-        .bot {
-            align-self: flex-start;
-            background: #ffffff;
-            border: 1px solid #ddd;
-        }
-        .user {
+
+        .bubble.user {
             align-self: flex-end;
-            background: #ddd0f4;
+            background: var(--primary);
+            color: #fff;
+            border-bottom-right-radius: 4px;
         }
-        .input-row {
+
+        .bubble.bot {
+            align-self: flex-start;
+            background: #d8ede9;
+            color: var(--text);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input {
             display: flex;
             gap: 8px;
-            padding: 12px;
-            border-top: 1px solid #ddd;
+            background: #0d1f1c;
+            border-top: 1px solid #1e4a42;
         }
-        .input-row input {
+
+        .chat-input input, .toolbar input {
             flex: 1;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid #ccc;
-            font-size: 14px;
+            border: 1px solid #2a6b5e;
+            border-radius: 16px;
+            padding: 10px 12px;
+            font-size: 0.8rem;
+            outline: none;
         }
-        .input-row button, .controls button {
-            padding: 12px 14px;
-            border-radius: 12px;
+
+        .chat-input input {
+            background: #122b26;
+            color: #fff;
+        }
+
+        .chat-input input::placeholder {
+            color: #79a49b;
+        }
+
+        button {
             border: none;
-            background: #6d35b1;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .share-location {
-            background: #d62828 !important;
-            width: 100%;
-        }
-        .panel {
-            width: 430px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 12px 32px rgba(0,0,0,0.14);
-            padding: 20px;
-        }
-        .controls input {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 10px;
-            margin: 6px 0 10px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-        }
-        .state {
-            margin-top: 16px;
-            padding: 14px;
             border-radius: 12px;
-            background: #f5f2fb;
-            line-height: 1.6;
-            font-size: 14px;
+            padding: 10px 12px;
+            cursor: pointer;
+            font-weight: 700;
         }
+
+        .send-btn, .primary-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .danger-btn {
+            background: var(--red);
+            color: white;
+        }
+
+        .ghost-btn {
+            background: #edf3f2;
+            color: var(--primary-dark);
+            border: 1px solid var(--border);
+        }
+
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .toolbar, .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 14px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .stat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .stat .label {
+            font-size: 0.68rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat .value {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-top: 8px;
+        }
+
+        .red { color: var(--red); }
+        .yellow { color: var(--yellow); }
+        .green { color: var(--green); }
+
+        .card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .state-box {
+            font-size: 0.8rem;
+            line-height: 1.65;
+            background: #f8fbfa;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
         .badge {
             display: inline-block;
+            font-size: 0.7rem;
             padding: 4px 8px;
             border-radius: 999px;
-            background: #eee;
-            font-size: 12px;
-            margin: 4px 4px 0 0;
+            margin: 3px 6px 3px 0;
+            background: #eef3f2;
         }
-        #locationBox {
-            margin-top: 16px;
-            display: none;
+
+        .badge.red {
+            background: var(--red-pale);
+            color: var(--red);
         }
+
+        .badge.yellow {
+            background: var(--yellow-pale);
+            color: var(--yellow);
+        }
+
+        .badge.green {
+            background: var(--green-pale);
+            color: var(--green);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px 8px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        tr:hover {
+            background: #fafdfc;
+        }
+
+        .pill {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 4px 8px;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .pill.red {
+            background: var(--red-pale);
+            color: var(--red);
+        }
+
+        .pill.yellow {
+            background: var(--yellow-pale);
+            color: var(--yellow);
+        }
+
+        .pill.green {
+            background: var(--green-pale);
+            color: var(--green);
+        }
+
         .muted {
-            color: #666;
-            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .row-actions button {
+            font-size: 0.7rem;
+            padding: 6px 8px;
+        }
+
+        @media (max-width: 1000px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="page">
-        <div class="phone">
-            <div class="header">Aya - Antenatal Companion</div>
-            <div id="chat" class="chat">
-                <div class="bubble bot">Patient sends the first message to begin.</div>
-            </div>
-            <div class="input-row">
-                <input id="messageInput" type="text" placeholder="Type message..." />
-                <button onclick="sendMessage()">Send</button>
+    <header>
+        <div>
+            <h1>Aya Antenatal Companion</h1>
+            <p>Integrated patient simulator + clinic dashboard</p>
+        </div>
+        <div class="clock" id="clock">--:--:--</div>
+    </header>
+
+    <div class="main">
+        <div class="phone-wrap">
+            <div class="phone-label">Patient SMS Simulator</div>
+            <div class="phone-frame">
+                <div class="phone-status">
+                    <span>Aya</span>
+                    <span>SMS Triage</span>
+                    <span id="phoneClock">--:--</span>
+                </div>
+                <div class="phone-contact">
+                    <div class="name">Aya Antenatal Companion</div>
+                    <div class="sub" id="patientTag">Select or enter a phone number</div>
+                </div>
+                <div class="progress-wrap">
+                    <div style="font-size:0.68rem;color:#86b5ad;">Assessment Progress <span id="progressText" style="float:right;">0%</span></div>
+                    <div class="progress-line">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <div id="chat" class="chat">
+                    <div class="bubble bot">Type any message to start, or select one of the hardcoded demo patients on the right.</div>
+                </div>
+                <div class="chat-input">
+                    <input id="phoneInput" value="+2347000000001" placeholder="Phone number" />
+                </div>
+                <div class="chat-input">
+                    <input id="messageInput" placeholder="Type message..." />
+                    <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
             </div>
         </div>
 
-        <div class="panel">
-            <div class="controls">
-                <label><strong>Patient phone number</strong></label>
-                <input id="phoneInput" type="text" value="+447700900123" />
+        <div class="dashboard">
+            <div class="toolbar">
+                <input id="lookupPhone" value="+2347000000001" placeholder="Load patient by phone" />
+                <button class="primary-btn" onclick="loadSinglePatient()">Load patient</button>
+                <button class="ghost-btn" onclick="refreshPatients()">Refresh dashboard</button>
+                <button class="danger-btn" onclick="shareLocation()">Share emergency location</button>
             </div>
 
-            <div id="state" class="state">No patient state loaded yet.</div>
-
-            <div id="locationBox">
-                <button class="share-location" onclick="shareLocation()">Share Emergency Location</button>
-                <div class="muted" style="margin-top:8px;">
-                    This only appears for completed emergency cases.
+            <div class="stats">
+                <div class="stat">
+                    <div class="label">Total Patients</div>
+                    <div class="value" id="statTotal">0</div>
                 </div>
+                <div class="stat">
+                    <div class="label">High Risk</div>
+                    <div class="value red" id="statRed">0</div>
+                </div>
+                <div class="stat">
+                    <div class="label">Medium Risk</div>
+                    <div class="value yellow" id="statYellow">0</div>
+                </div>
+                <div class="stat">
+                    <div class="label">Low Risk</div>
+                    <div class="value green" id="statGreen">0</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Selected Patient State</h3>
+                <div id="stateBox" class="state-box">No patient loaded.</div>
+            </div>
+
+            <div class="card">
+                <h3>10 Hardcoded Patients</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phone</th>
+                            <th>Age / Week</th>
+                            <th>Risk</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="patientsTable"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
+        let selectedPatient = null;
+
+        function nowTime() {
+            return new Date().toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+
+        function tick() {
+            document.getElementById('clock').textContent = nowTime();
+            document.getElementById('phoneClock').textContent = new Date().toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+        setInterval(tick, 1000);
+        tick();
+
         function addBubble(text, cls) {
             const chat = document.getElementById("chat");
             const bubble = document.createElement("div");
@@ -752,15 +1249,47 @@ DEMO_HTML = """
             chat.scrollTop = chat.scrollHeight;
         }
 
+        function riskClass(risk) {
+            if (risk === "red") return "red";
+            if (risk === "yellow") return "yellow";
+            return "green";
+        }
+
+        function riskPill(risk) {
+            const cls = riskClass(risk);
+            return `<span class="pill ${cls}">${risk.toUpperCase()}</span>`;
+        }
+
+        function progressPercent(patient) {
+            if (!patient) return 0;
+            if (patient.completed) return 100;
+            if (patient.status === "awaiting_language") return 5;
+            if (patient.status === "registering_age") return 15;
+            if (patient.status === "registering_week") return 25;
+            if (patient.status === "triage") {
+                const map = {
+                    q1: 35, q2: 42, q3: 49, q4: 56, q5: 63,
+                    q6: 70, q7: 77, q8: 84, q9: 90, q10: 95, q11: 98
+                };
+                return map[patient.current_question] || 30;
+            }
+            return 0;
+        }
+
         function renderState(patient) {
-            const state = document.getElementById("state");
-            const locationBox = document.getElementById("locationBox");
+            const state = document.getElementById("stateBox");
+            const progress = progressPercent(patient);
+            document.getElementById("progressFill").style.width = progress + "%";
+            document.getElementById("progressText").textContent = progress + "%";
 
             if (!patient) {
                 state.innerHTML = "Patient not found.";
-                locationBox.style.display = "none";
+                document.getElementById("patientTag").textContent = "No active patient";
                 return;
             }
+
+            selectedPatient = patient;
+            document.getElementById("patientTag").textContent = patient.phone + " · " + (patient.language || "Not set");
 
             const symptoms = (patient.symptoms || []).map(s => `<span class="badge">${s}</span>`).join("");
             const riskFactors = (patient.risk_factors || []).map(s => `<span class="badge">${s}</span>`).join("");
@@ -780,15 +1309,59 @@ DEMO_HTML = """
                 <strong>Required response:</strong> ${patient.required_response}<br>
                 <strong>Next due:</strong> ${patient.next_assessment_due ?? "Not set"}<br>
                 <strong>Location:</strong> ${location}<br><br>
-                <strong>Symptoms:</strong><br>${symptoms || "None"}<br><br>
-                <strong>Risk factors:</strong><br>${riskFactors || "None"}
+                <strong>Symptoms:</strong><br>${symptoms || '<span class="muted">None</span>'}<br><br>
+                <strong>Risk factors:</strong><br>${riskFactors || '<span class="muted">None</span>'}
             `;
+        }
 
-            if (patient.risk === "red" && patient.completed) {
-                locationBox.style.display = "block";
-            } else {
-                locationBox.style.display = "none";
+        async function refreshPatients() {
+            const response = await fetch("/api/patients");
+            const data = await response.json();
+
+            const patients = data.patients || [];
+            document.getElementById("statTotal").textContent = patients.length;
+            document.getElementById("statRed").textContent = patients.filter(p => p.risk === "red").length;
+            document.getElementById("statYellow").textContent = patients.filter(p => p.risk === "yellow").length;
+            document.getElementById("statGreen").textContent = patients.filter(p => p.risk === "green").length;
+
+            const tbody = document.getElementById("patientsTable");
+            tbody.innerHTML = "";
+
+            patients.forEach(patient => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${patient.phone}</td>
+                    <td>${patient.age ?? "—"} / ${patient.pregnancy_week ?? "—"}</td>
+                    <td>${riskPill(patient.risk)}</td>
+                    <td>${patient.status}</td>
+                    <td>
+                        <div class="row-actions">
+                            <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Load</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function selectPatient(phone) {
+            document.getElementById("phoneInput").value = phone;
+            document.getElementById("lookupPhone").value = phone;
+            await loadSinglePatient();
+        }
+
+        async function loadSinglePatient() {
+            const phone = document.getElementById("lookupPhone").value.trim();
+            if (!phone) return;
+
+            const response = await fetch("/api/patient/" + encodeURIComponent(phone));
+            if (!response.ok) {
+                renderState(null);
+                return;
             }
+
+            const patient = await response.json();
+            renderState(patient);
         }
 
         async function sendMessage() {
@@ -796,7 +1369,7 @@ DEMO_HTML = """
             const input = document.getElementById("messageInput");
             const text = input.value.trim();
 
-            if (!text) return;
+            if (!phone || !text) return;
 
             addBubble(text, "user");
             input.value = "";
@@ -810,6 +1383,7 @@ DEMO_HTML = """
             const data = await response.json();
             addBubble(data.reply, "bot");
             renderState(data.patient);
+            await refreshPatients();
         }
 
         async function shareLocation() {
@@ -841,6 +1415,7 @@ DEMO_HTML = """
                     }
 
                     renderState(data.patient || null);
+                    await refreshPatients();
                 },
                 () => {
                     addBubble("Location permission was denied or unavailable.", "bot");
@@ -851,27 +1426,22 @@ DEMO_HTML = """
         document.getElementById("messageInput").addEventListener("keypress", function(e) {
             if (e.key === "Enter") sendMessage();
         });
+
+        refreshPatients();
+        loadSinglePatient();
     </script>
 </body>
 </html>
 """
+
 
 # ---------------------------------
 # Routes
 # ---------------------------------
 @app.route("/")
 def home():
-    return (
-        f"{APP_NAME} ({APP_SUBTITLE}) server is live.<br>"
-        "Available routes:<br>"
-        "/demo - patient phone simulation<br>"
-        "/clinic-dashboard - clinic-facing dashboard<br>"
-        "/api/patients - patient JSON for clinic dashboard<br>"
-        "/api/patient/&lt;phone&gt; - single patient JSON<br>"
-        "/api/share-location - POST emergency location from simulation<br>"
-        "/sms - Twilio webhook<br>"
-        "/health - health check"
-    )
+    return render_template_string(CLINIC_HTML)
+
 
 @app.route("/health")
 def health():
@@ -883,13 +1453,16 @@ def health():
         "time": now_iso(),
     })
 
+
 @app.route("/demo")
 def demo():
-    return render_template_string(DEMO_HTML)
+    return render_template_string(CLINIC_HTML)
+
 
 @app.route("/clinic-dashboard")
 def clinic_dashboard():
     return render_template_string(CLINIC_HTML)
+
 
 @app.route("/api/patients")
 def api_patients():
@@ -902,6 +1475,7 @@ def api_patients():
         "patients": rows,
     })
 
+
 @app.route("/api/patient/<path:phone>")
 def api_patient(phone):
     phone_key = phone if phone.startswith("+") else f"+{phone}" if phone.isdigit() else phone
@@ -909,6 +1483,16 @@ def api_patient(phone):
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
     return jsonify(clinic_row(patient))
+
+
+@app.route("/api/reset-demo", methods=["POST"])
+def api_reset_demo():
+    seed_demo_patients()
+    return jsonify({
+        "message": "Demo patients reset.",
+        "patient_count": len(patients),
+    })
+
 
 @app.route("/api/share-location", methods=["POST"])
 def api_share_location():
@@ -944,10 +1528,11 @@ def api_share_location():
         "patient": clinic_row(patient),
     })
 
+
 @app.route("/simulate-sms", methods=["POST"])
 def simulate_sms():
     data = request.get_json() or {}
-    phone = str(data.get("phone", "+447700900123"))
+    phone = str(data.get("phone", "+2347000000001"))
     body = str(data.get("body", ""))
 
     patient = patients.get(phone) or create_patient(phone)
@@ -958,6 +1543,7 @@ def simulate_sms():
         "reply": reply,
         "patient": clinic_row(current_patient) if current_patient else None
     })
+
 
 @app.route("/sms", methods=["POST"])
 def sms_reply():
@@ -973,5 +1559,6 @@ def sms_reply():
 
     return twiml_message(reply)
 
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=8080, debug=True)

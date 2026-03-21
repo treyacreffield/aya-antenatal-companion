@@ -1,5 +1,5 @@
 from flask import Flask, request, Response, jsonify, render_template_string
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
@@ -12,60 +12,241 @@ APP_SUBTITLE = "Antenatal Companion"
 patients = {}
 
 # ---------------------------------
-# Question flow configuration
+# Language config
+# Demo translations - should be reviewed by native speakers for production use
 # ---------------------------------
-QUESTION_TEXT = {
-    "registration_age": "Welcome to Aya. Please reply with your age in years using numbers only.",
-    "registration_week": "Please reply with your pregnancy week using numbers only. If you do not know, reply 0.",
-    "q1": (
-        "Q1. Are you experiencing any of these danger signs: heavy bleeding, fits/seizures, or blurred vision?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q2": (
-        "Q2. Are you having a severe constant headache?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q3": (
-        "Q3. Do you have fever or chills?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q4": (
-        "Q4. Is water leaking or has your fluid broken?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q5": (
-        "Q5. Have you noticed reduced fetal movement?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q6": (
-        "Q6. Do you have itchy hands or feet?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q7": (
-        "Q7. Do you have severe pelvic or abdominal pain?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q8": (
-        "Q8. Have you previously had pre-eclampsia or stillbirth?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q9": (
-        "Q9. Do you have a history of hypertension (high blood pressure)?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q10": (
-        "Q10. Do you have a history of diabetes?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
-    "q11": (
-        "Q11. Are you younger than 18 or older than 35?\n"
-        "Reply:\n1. Yes\n2. No"
-    ),
+LANGUAGES = {
+    "1": "en",
+    "2": "pidgin",
+    "3": "ha",
+    "4": "yo",
+    "5": "ig",
 }
 
-QUESTION_SEQUENCE = [
-    "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11"
-]
+LANGUAGE_NAMES = {
+    "en": "English",
+    "pidgin": "Pidgin",
+    "ha": "Hausa",
+    "yo": "Yoruba",
+    "ig": "Igbo",
+}
+
+TEXT = {
+    "en": {
+        "language_prompt": (
+            "Welcome to Aya.\n"
+            "Choose your language:\n"
+            "1. English\n"
+            "2. Pidgin\n"
+            "3. Hausa\n"
+            "4. Yoruba\n"
+            "5. Igbo"
+        ),
+        "language_invalid": "Please reply with 1, 2, 3, 4, or 5 to choose a language.",
+        "registration_age": "Please reply with your age in years using numbers only.",
+        "registration_week": "Please reply with your pregnancy week using numbers only. If you do not know, reply 0.",
+        "invalid_age": "Please reply with your age using numbers only, for example: 24",
+        "invalid_week": "Please reply with your pregnancy week using numbers only. If unknown, reply 0.",
+        "invalid_yes_no": "Please reply with 1 for Yes or 2 for No.",
+        "help_before_registration": "To begin your assessment, please complete registration first.",
+        "assessment_in_progress": "Your assessment is in progress. Please continue answering with numbers only.",
+        "deleted": "Your data has been removed from Aya. If you message again, a new record will be created.",
+        "restart_msg": "Starting a new assessment.",
+        "status_incomplete": "Your assessment is still in progress. Please continue answering the questions with numbers only.",
+        "status_complete": "Your latest assessment is complete.",
+        "q1": (
+            "Q1. Are you experiencing any of these danger signs: heavy bleeding, fits/seizures, or blurred vision?\n"
+            "Reply:\n1. Yes\n2. No"
+        ),
+        "q2": "Q2. Are you having a severe constant headache?\nReply:\n1. Yes\n2. No",
+        "q3": "Q3. Do you have fever or chills?\nReply:\n1. Yes\n2. No",
+        "q4": "Q4. Is water leaking or has your fluid broken?\nReply:\n1. Yes\n2. No",
+        "q5": "Q5. Have you noticed reduced fetal movement?\nReply:\n1. Yes\n2. No",
+        "q6": "Q6. Do you have itchy hands or feet?\nReply:\n1. Yes\n2. No",
+        "q7": "Q7. Do you have severe pelvic or abdominal pain?\nReply:\n1. Yes\n2. No",
+        "q8": "Q8. Have you previously had pre-eclampsia or stillbirth?\nReply:\n1. Yes\n2. No",
+        "q9": "Q9. Do you have a history of hypertension (high blood pressure)?\nReply:\n1. Yes\n2. No",
+        "q10": "Q10. Do you have a history of diabetes?\nReply:\n1. Yes\n2. No",
+        "q11": "Q11. Are you younger than 18 or older than 35?\nReply:\n1. Yes\n2. No",
+        "patient_red": (
+            "Aya has flagged your assessment as urgent. Please go to the nearest hospital or dial your local emergency number now. "
+            "A clinic has also been alerted."
+        ),
+        "patient_yellow": (
+            "Aya has completed your assessment. A clinic will phone you soon to follow up. "
+            "If your symptoms worsen before then, go to the nearest hospital."
+        ),
+        "patient_green": (
+            "Aya has completed your assessment. You can continue routine antenatal care and monitor for new symptoms. "
+            "If new warning signs appear, seek medical help."
+        ),
+        "reassess_prompt": "Reply HELP at any time to take another assessment.",
+        "next_due": "Your next routine assessment is due on {date}.",
+        "help_complete": "Reply HELP to start a new assessment.",
+    },
+    "pidgin": {
+        "language_prompt": (
+            "Welcome to Aya.\n"
+            "Choose your language:\n"
+            "1. English\n"
+            "2. Pidgin\n"
+            "3. Hausa\n"
+            "4. Yoruba\n"
+            "5. Igbo"
+        ),
+        "language_invalid": "Abeg reply 1, 2, 3, 4, or 5 to choose language.",
+        "registration_age": "Abeg reply your age for years with number only.",
+        "registration_week": "Abeg reply your pregnancy week with number only. If you no know am, reply 0.",
+        "invalid_age": "Abeg reply your age with number only, example: 24",
+        "invalid_week": "Abeg reply your pregnancy week with number only. If you no know am, reply 0.",
+        "invalid_yes_no": "Abeg reply 1 for Yes or 2 for No.",
+        "help_before_registration": "To begin assessment, first finish registration.",
+        "assessment_in_progress": "Your assessment still dey go on. Abeg continue to answer with number only.",
+        "deleted": "Aya don remove your data. If you message again, we go create new record.",
+        "restart_msg": "We don start new assessment.",
+        "status_incomplete": "Your assessment never finish. Abeg continue answer the questions with number only.",
+        "status_complete": "Your latest assessment don complete.",
+        "q1": "Q1. You dey get any danger sign like heavy bleeding, fits/seizures, or blurred vision?\nReply:\n1. Yes\n2. No",
+        "q2": "Q2. You get strong constant headache?\nReply:\n1. Yes\n2. No",
+        "q3": "Q3. You get fever or chills?\nReply:\n1. Yes\n2. No",
+        "q4": "Q4. Water dey leak or your fluid don break?\nReply:\n1. Yes\n2. No",
+        "q5": "Q5. You notice reduced fetal movement?\nReply:\n1. Yes\n2. No",
+        "q6": "Q6. Your hands or feet dey itch?\nReply:\n1. Yes\n2. No",
+        "q7": "Q7. You get serious pelvic or abdominal pain?\nReply:\n1. Yes\n2. No",
+        "q8": "Q8. You don get pre-eclampsia or stillbirth before?\nReply:\n1. Yes\n2. No",
+        "q9": "Q9. You get history of hypertension/high blood pressure?\nReply:\n1. Yes\n2. No",
+        "q10": "Q10. You get history of diabetes?\nReply:\n1. Yes\n2. No",
+        "q11": "Q11. You dey under 18 or over 35?\nReply:\n1. Yes\n2. No",
+        "patient_red": "Aya don flag your assessment as urgent. Abeg go nearest hospital or call emergency number now. Clinic don receive alert too.",
+        "patient_yellow": "Aya don complete your assessment. Clinic go call you soon. If your symptoms worsen before then, go nearest hospital.",
+        "patient_green": "Aya don complete your assessment. Continue routine antenatal care and watch for new symptoms. If warning signs show, look for medical help.",
+        "reassess_prompt": "Reply HELP anytime to take another assessment.",
+        "next_due": "Your next routine assessment dey due on {date}.",
+        "help_complete": "Reply HELP to start another assessment.",
+    },
+    "ha": {
+        "language_prompt": (
+            "Barka da zuwa Aya.\n"
+            "Zaɓi harshe:\n"
+            "1. English\n"
+            "2. Pidgin\n"
+            "3. Hausa\n"
+            "4. Yoruba\n"
+            "5. Igbo"
+        ),
+        "language_invalid": "Da fatan a amsa da 1, 2, 3, 4, ko 5 domin zaɓar harshe.",
+        "registration_age": "Da fatan a turo shekarunki da lambobi kaɗai.",
+        "registration_week": "Da fatan a turo makon ciki da lambobi kaɗai. Idan ba ki sani ba, ki turo 0.",
+        "invalid_age": "Da fatan a turo shekarunki da lambobi kaɗai, misali: 24",
+        "invalid_week": "Da fatan a turo makon ciki da lambobi kaɗai. Idan ba ki sani ba, ki turo 0.",
+        "invalid_yes_no": "Da fatan a amsa da 1 don Eh ko 2 don A'a.",
+        "help_before_registration": "Don fara tantancewa, da farko ki kammala rajista.",
+        "assessment_in_progress": "Tantancewarki na gudana. Da fatan ki ci gaba da amsawa da lambobi kaɗai.",
+        "deleted": "An cire bayananki daga Aya. Idan kika sake yin saƙo, za a ƙirƙiri sabon bayaninki.",
+        "restart_msg": "An fara sabon tantancewa.",
+        "status_incomplete": "Tantancewarki ba ta kammala ba tukuna. Ki ci gaba da amsa tambayoyin da lambobi kaɗai.",
+        "status_complete": "An kammala tantancewarki ta ƙarshe.",
+        "q1": "Q1. Kina da wata alamar haɗari kamar zubar jini mai yawa, farfaɗiya, ko gani ya dusashe?\nAmsa:\n1. Eh\n2. A'a",
+        "q2": "Q2. Kina da matsanancin ciwon kai mai dorewa?\nAmsa:\n1. Eh\n2. A'a",
+        "q3": "Q3. Kina da zazzabi ko sanyi?\nAmsa:\n1. Eh\n2. A'a",
+        "q4": "Q4. Ruwa na fita ko ruwan ciki ya fashe?\nAmsa:\n1. Eh\n2. A'a",
+        "q5": "Q5. Kin lura motsin jariri ya ragu?\nAmsa:\n1. Eh\n2. A'a",
+        "q6": "Q6. Hannaye ko ƙafafunki na kaikayi?\nAmsa:\n1. Eh\n2. A'a",
+        "q7": "Q7. Kina da matsanancin ciwon ƙugu ko ciki?\nAmsa:\n1. Eh\n2. A'a",
+        "q8": "Q8. Kina da tarihin pre-eclampsia ko haihuwar gawa?\nAmsa:\n1. Eh\n2. A'a",
+        "q9": "Q9. Kina da tarihin hawan jini?\nAmsa:\n1. Eh\n2. A'a",
+        "q10": "Q10. Kina da tarihin ciwon sukari?\nAmsa:\n1. Eh\n2. A'a",
+        "q11": "Q11. Shekarunki kasa da 18 ne ko sama da 35?\nAmsa:\n1. Eh\n2. A'a",
+        "patient_red": "Aya ta gano gaggawa. Ki je asibiti mafi kusa ko ki kira lambar gaggawa yanzu. An kuma sanar da asibitin yankinku.",
+        "patient_yellow": "Aya ta kammala tantancewa. Asibiti zai kira ki nan ba da jimawa ba. Idan alamunki suka tsananta kafin lokacin, ki je asibiti mafi kusa.",
+        "patient_green": "Aya ta kammala tantancewa. Ki ci gaba da kula da ciki kamar kullum kuma ki lura da sababbin alamomi. Idan alamar haɗari ta bayyana, ki nemi taimakon lafiya.",
+        "reassess_prompt": "A turo HELP a kowane lokaci don sake yin tantancewa.",
+        "next_due": "Lokacin tantancewa ta gaba zai yi ranar {date}.",
+        "help_complete": "A turo HELP don fara sabon tantancewa.",
+    },
+    "yo": {
+        "language_prompt": (
+            "Kaabo si Aya.\n"
+            "Yan ede re:\n"
+            "1. English\n"
+            "2. Pidgin\n"
+            "3. Hausa\n"
+            "4. Yoruba\n"
+            "5. Igbo"
+        ),
+        "language_invalid": "Jowo fi 1, 2, 3, 4, tabi 5 ranse lati yan ede.",
+        "registration_age": "Jowo fi ori re ranse pelu nomba nikan.",
+        "registration_week": "Jowo fi ose oyun re ranse pelu nomba nikan. Ti o ko ba mo, fi 0 ranse.",
+        "invalid_age": "Jowo fi ori re ranse pelu nomba nikan, apere: 24",
+        "invalid_week": "Jowo fi ose oyun re ranse pelu nomba nikan. Ti o ko ba mo, fi 0 ranse.",
+        "invalid_yes_no": "Jowo fi 1 fun Beni tabi 2 fun Beeko.",
+        "help_before_registration": "Lati bere ayewo, jowo ko pari iforuko sile tele.",
+        "assessment_in_progress": "Ayewo re n lo lowo. Jowo tesiwaju lati dahun pelu nomba nikan.",
+        "deleted": "A ti pa data re nu kuro ninu Aya. Ti o ba tun fi ifiranse ranse, a o da akosile tuntun sile.",
+        "restart_msg": "A ti bere ayewo tuntun.",
+        "status_incomplete": "Ayewo re ko tii pari. Jowo tesiwaju lati dahun awon ibeere pelu nomba nikan.",
+        "status_complete": "Ayewo to kẹhin ti pari.",
+        "q1": "Q1. Se o n ni eyikeyi awon ami ewu wonyi: eje pupo, seizure, tabi iran to dinku?\nDahun:\n1. Beni\n2. Beeko",
+        "q2": "Q2. Se o n ni efori to lagbara ti ko n lo?\nDahun:\n1. Beni\n2. Beeko",
+        "q3": "Q3. Se o ni iba tabi otutu inu ara?\nDahun:\n1. Beni\n2. Beeko",
+        "q4": "Q4. Se omi n jo tabi fluid re ti fo?\nDahun:\n1. Beni\n2. Beeko",
+        "q5": "Q5. Se o ti se akiyesi pe gbigbe omo inu dinku?\nDahun:\n1. Beni\n2. Beeko",
+        "q6": "Q6. Se owo tabi ese re n yun?\nDahun:\n1. Beni\n2. Beeko",
+        "q7": "Q7. Se o n ni irora nla ni ikun tabi ibadi?\nDahun:\n1. Beni\n2. Beeko",
+        "q8": "Q8. Se o ti ni pre-eclampsia tabi stillbirth tele?\nDahun:\n1. Beni\n2. Beeko",
+        "q9": "Q9. Se o ni itan hypertension/tabi high blood pressure?\nDahun:\n1. Beni\n2. Beeko",
+        "q10": "Q10. Se o ni itan diabetes?\nDahun:\n1. Beni\n2. Beeko",
+        "q11": "Q11. Se ori re kere ju 18 tabi ju 35 lo?\nDahun:\n1. Beni\n2. Beeko",
+        "patient_red": "Aya ti fi ayewo re han gege bi pajawiri. Jowo lo si ile-iwosan to sunmo re tabi pe nomba emergency bayii. A tun ti kilo fun ile-iwosan agbegbe re.",
+        "patient_yellow": "Aya ti pari ayewo re. Ile-iwosan yoo pe e laipe. Ti aami aisan ba buru si, lo si ile-iwosan to sunmo re.",
+        "patient_green": "Aya ti pari ayewo re. O le tesiwaju pelu itoju oyun deede ki o si maa wo awon aami tuntun. Ti aami ewu ba farahan, wa iranlowo ilera.",
+        "reassess_prompt": "Fi HELP ranse nigbakugba lati tun se ayewo.",
+        "next_due": "Ayewo deede to tele ye ni ojo {date}.",
+        "help_complete": "Fi HELP ranse lati bere ayewo tuntun.",
+    },
+    "ig": {
+        "language_prompt": (
+            "Nnọọ na Aya.\n"
+            "Họrọ asụsụ gị:\n"
+            "1. English\n"
+            "2. Pidgin\n"
+            "3. Hausa\n"
+            "4. Yoruba\n"
+            "5. Igbo"
+        ),
+        "language_invalid": "Biko zaa 1, 2, 3, 4, ma ọ bụ 5 iji họrọ asụsụ.",
+        "registration_age": "Biko ziga afọ gị site na nọmba naanị.",
+        "registration_week": "Biko ziga izu ime gị site na nọmba naanị. Ọ bụrụ na ị maghị, ziga 0.",
+        "invalid_age": "Biko ziga afọ gị site na nọmba naanị, dịka: 24",
+        "invalid_week": "Biko ziga izu ime gị site na nọmba naanị. Ọ bụrụ na ị maghị, ziga 0.",
+        "invalid_yes_no": "Biko zaa 1 maka Ee ma ọ bụ 2 maka Mba.",
+        "help_before_registration": "Iji malite nyocha, biko mezue ndebanye aha mbụ.",
+        "assessment_in_progress": "Nyocha gị ka na-aga. Biko gaa n'ihu na-aza site na nọmba naanị.",
+        "deleted": "E wepụrụ data gị na Aya. Ọ bụrụ na ị ziga ozi ọzọ, a ga-emepụta ndekọ ọhụrụ.",
+        "restart_msg": "A malitela nyocha ọhụrụ.",
+        "status_incomplete": "Nyocha gị agwụbeghị. Biko gaa n'ihu na-aza ajụjụ ndị ahụ site na nọmba naanị.",
+        "status_complete": "Nyocha ikpeazụ gị agwụla.",
+        "q1": "Q1. Ị na-enwe otu n'ime ihe ize ndụ ndị a: ọbara ọgbụgba ukwuu, seizure, ma ọ bụ anya na-adịghị ahụ nke ọma?\nZaa:\n1. Ee\n2. Mba",
+        "q2": "Q2. Ị na-enwe isi ọwụwa siri ike na-adịgide?\nZaa:\n1. Ee\n2. Mba",
+        "q3": "Q3. Ị nwere fever ma ọ bụ chills?\nZaa:\n1. Ee\n2. Mba",
+        "q4": "Q4. Mmiri na-apụta ma ọ bụ fluid agbajiela?\nZaa:\n1. Ee\n2. Mba",
+        "q5": "Q5. Ị chọpụtara na mmegharị nwa ebu n’afọ belatara?\nZaa:\n1. Ee\n2. Mba",
+        "q6": "Q6. Aka ma ọ bụ ụkwụ gị na-akọwa?\nZaa:\n1. Ee\n2. Mba",
+        "q7": "Q7. Ị na-enwe mgbu siri ike n’afọ ma ọ bụ n’akụkụ ikpere/ukwu?\nZaa:\n1. Ee\n2. Mba",
+        "q8": "Q8. Ị nwere akụkọ pre-eclampsia ma ọ bụ stillbirth tupu a?\nZaa:\n1. Ee\n2. Mba",
+        "q9": "Q9. Ị nwere akụkọ hypertension / high blood pressure?\nZaa:\n1. Ee\n2. Mba",
+        "q10": "Q10. Ị nwere akụkọ diabetes?\nZaa:\n1. Ee\n2. Mba",
+        "q11": "Q11. Afọ gị dị n'okpuru 18 ma ọ bụ karịa 35?\nZaa:\n1. Ee\n2. Mba",
+        "patient_red": "Aya achọpụtala na ọnọdụ a dị ngwa. Biko gaa ụlọ ọgwụ kacha nso ma ọ bụ kpọọ nọmba mberede ugbu a. A gwala ụlọ ọgwụ mpaghara gị kwa.",
+        "patient_yellow": "Aya emechala nyocha gị. Ụlọ ọgwụ ga-akpọ gị n’oge na-adịghị anya. Ọ bụrụ na mgbaàmà gị ka njọ tupu ahụ, gaa ụlọ ọgwụ kacha nso.",
+        "patient_green": "Aya emechala nyocha gị. Ị nwere ike ịga n’ihu na nlekọta ime nkịtị ma leba anya na mgbaàmà ọhụrụ. Ọ bụrụ na ihe ize ndụ pụta, chọọ enyemaka ahụike.",
+        "reassess_prompt": "Zipu HELP oge ọ bụla iji mee nyocha ọzọ.",
+        "next_due": "Nyocha nkịtị na-esote gị ga-abụ na {date}.",
+        "help_complete": "Zipu HELP iji malite nyocha ọhụrụ.",
+    },
+}
+
+QUESTION_SEQUENCE = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11"]
 
 QUESTION_POINTS = {
     "q1": 5,
@@ -101,6 +282,24 @@ QUESTION_LABELS = {
 def now_iso():
     return datetime.utcnow().isoformat()
 
+def format_due_date(dt_str):
+    if not dt_str:
+        return "Not set"
+    try:
+        dt = datetime.fromisoformat(dt_str)
+        return dt.strftime("%d %b %Y")
+    except Exception:
+        return dt_str
+
+def tr(patient, key, **kwargs):
+    lang = patient.get("language", "en")
+    template = TEXT.get(lang, TEXT["en"]).get(key, TEXT["en"].get(key, key))
+    return template.format(**kwargs)
+
+def qtext(patient, qid):
+    lang = patient.get("language", "en")
+    return TEXT.get(lang, TEXT["en"]).get(qid, TEXT["en"][qid])
+
 def twiml_message(text: str) -> Response:
     safe_text = (
         text.replace("&", "&amp;")
@@ -127,32 +326,24 @@ def required_response_from_risk(risk: str) -> str:
         return "Phone call"
     return "Routine monitoring"
 
-def patient_message_from_risk(risk: str) -> str:
+def patient_message_from_risk(patient, risk: str) -> str:
     if risk == "red":
-        return (
-            "Aya has flagged your assessment as urgent. "
-            "Please go to the nearest hospital or dial your local emergency number now. "
-            "A clinic has also been alerted."
-        )
+        return tr(patient, "patient_red")
     if risk == "yellow":
-        return (
-            "Aya has completed your assessment. "
-            "A clinic will phone you soon to follow up. "
-            "If your symptoms worsen before then, go to the nearest hospital."
-        )
-    return (
-        "Aya has completed your assessment. "
-        "You can continue routine antenatal care and monitor for new symptoms. "
-        "If new warning signs appear, seek medical help."
-    )
+        return tr(patient, "patient_yellow")
+    return tr(patient, "patient_green")
+
+def next_due_date():
+    return (datetime.utcnow() + timedelta(days=14)).isoformat()
 
 def create_patient(phone: str) -> dict:
     patient = {
         "phone": phone,
+        "language": None,
         "age": None,
         "pregnancy_week": None,
-        "status": "registering_age",
-        "current_question": "registration_age",
+        "status": "awaiting_language",   # awaiting_language -> registering_age -> registering_week -> triage -> completed
+        "current_question": "language",
         "score": 0,
         "risk": "green",
         "required_response": "Routine monitoring",
@@ -164,6 +355,8 @@ def create_patient(phone: str) -> dict:
         "updated_at": now_iso(),
         "last_message": None,
         "completed": False,
+        "last_completed_at": None,
+        "next_assessment_due": None,
     }
     patients[phone] = patient
     return patient
@@ -180,6 +373,7 @@ def delete_patient(phone: str) -> bool:
 def clinic_row(patient: dict) -> dict:
     return {
         "phone": patient["phone"],
+        "language": LANGUAGE_NAMES.get(patient.get("language"), "Not set"),
         "age": patient["age"],
         "pregnancy_week": patient["pregnancy_week"],
         "score": patient["score"],
@@ -191,6 +385,8 @@ def clinic_row(patient: dict) -> dict:
         "status": patient["status"],
         "completed": patient["completed"],
         "updated_at": patient["updated_at"],
+        "last_completed_at": patient["last_completed_at"],
+        "next_assessment_due": patient["next_assessment_due"],
         "answers": patient["answers"],
     }
 
@@ -226,11 +422,11 @@ def next_question_after(qid: str):
 def update_risk(patient: dict):
     patient["risk"] = risk_from_score(patient["score"])
     patient["required_response"] = required_response_from_risk(patient["risk"])
-    patient["patient_message"] = patient_message_from_risk(patient["risk"])
+    patient["patient_message"] = patient_message_from_risk(patient, patient["risk"])
 
-def restart_assessment(patient: dict):
-    patient["status"] = "registering_age"
-    patient["current_question"] = "registration_age"
+def restart_assessment(patient: dict, keep_registration=True):
+    patient["status"] = "triage" if keep_registration and patient.get("language") and patient.get("age") is not None else "awaiting_language"
+    patient["current_question"] = "q1" if patient["status"] == "triage" else "language"
     patient["score"] = 0
     patient["risk"] = "green"
     patient["required_response"] = "Routine monitoring"
@@ -240,6 +436,10 @@ def restart_assessment(patient: dict):
     patient["answers"] = {}
     patient["completed"] = False
     patient["updated_at"] = now_iso()
+    if not keep_registration:
+        patient["language"] = None
+        patient["age"] = None
+        patient["pregnancy_week"] = None
 
 def apply_question_answer(patient: dict, qid: str, yes: bool):
     patient["answers"][qid] = yes
@@ -259,86 +459,148 @@ def complete_assessment(patient: dict):
     patient["status"] = "completed"
     patient["current_question"] = None
     patient["updated_at"] = now_iso()
+    patient["last_completed_at"] = now_iso()
+    patient["next_assessment_due"] = next_due_date()
     update_risk(patient)
 
+def assessment_complete_reply(patient):
+    due_text = tr(patient, "next_due", date=format_due_date(patient["next_assessment_due"]))
+    return f"{patient['patient_message']}\n\n{due_text}\n{tr(patient, 'help_complete')}"
+
+# ---------------------------------
+# Main processing
+# ---------------------------------
 def process_message(patient: dict, incoming_text: str) -> str:
     text = normalise_text(incoming_text)
     patient["last_message"] = incoming_text
     patient["updated_at"] = now_iso()
 
+    # Global delete
     if text == "delete me":
         delete_patient(patient["phone"])
-        return "Your data has been removed from Aya. If you message again, a new record will be created."
+        return patient_message_deleted(patient)
 
+    # If brand new / no language selected yet, first user message should trigger language selection
+    if patient["status"] == "awaiting_language" and patient["current_question"] == "language":
+        if patient["language"] is None:
+            # If they actually answered 1-5 on first message, accept it
+            if text in LANGUAGES:
+                patient["language"] = LANGUAGES[text]
+                patient["status"] = "registering_age"
+                patient["current_question"] = "registration_age"
+                patient["updated_at"] = now_iso()
+                return tr(patient, "registration_age")
+            return TEXT["en"]["language_prompt"]
+
+    # HELP starts assessment at any point
+    if text == "help":
+        if patient.get("language") is None:
+            patient["status"] = "awaiting_language"
+            patient["current_question"] = "language"
+            return TEXT["en"]["language_prompt"]
+
+        if patient.get("age") is None:
+            patient["status"] = "registering_age"
+            patient["current_question"] = "registration_age"
+            return tr(patient, "registration_age")
+
+        if patient.get("pregnancy_week") is None and patient.get("status") == "registering_week":
+            return tr(patient, "registration_week")
+
+        restart_assessment(patient, keep_registration=True)
+        return qtext(patient, "q1")
+
+    # Restart keeps registration if present
     if text == "restart":
-        restart_assessment(patient)
-        return QUESTION_TEXT["registration_age"]
+        if patient.get("language") and patient.get("age") is not None:
+            restart_assessment(patient, keep_registration=True)
+            return qtext(patient, "q1")
+        patient["status"] = "awaiting_language"
+        patient["current_question"] = "language"
+        return TEXT["en"]["language_prompt"]
 
+    # Status command
     if text == "status":
         if patient["completed"]:
-            return patient["patient_message"]
-        return "Your assessment is still in progress. Please continue answering the questions with numbers only."
+            return assessment_complete_reply(patient)
+        return tr(patient, "status_incomplete")
 
+    # Language selection stage
+    if patient["status"] == "awaiting_language":
+        if text not in LANGUAGES:
+            return TEXT["en"]["language_invalid"]
+        patient["language"] = LANGUAGES[text]
+        patient["status"] = "registering_age"
+        patient["current_question"] = "registration_age"
+        patient["updated_at"] = now_iso()
+        return tr(patient, "registration_age")
+
+    # Registration age
     if patient["status"] == "registering_age":
         age = parse_age(text)
         if age is None:
-            return "Please reply with your age using numbers only, for example: 24"
+            return tr(patient, "invalid_age")
         patient["age"] = age
         patient["status"] = "registering_week"
         patient["current_question"] = "registration_week"
         patient["updated_at"] = now_iso()
-        return QUESTION_TEXT["registration_week"]
+        return tr(patient, "registration_week")
 
+    # Registration week
     if patient["status"] == "registering_week":
         week = parse_week(text)
         if week is None:
-            return "Please reply with your pregnancy week using numbers only. If unknown, reply 0."
+            return tr(patient, "invalid_week")
         patient["pregnancy_week"] = None if week == 0 else week
         patient["status"] = "triage"
         patient["current_question"] = "q1"
         patient["updated_at"] = now_iso()
-        return QUESTION_TEXT["q1"]
+        return qtext(patient, "q1")
 
+    # Completed
     if patient["completed"]:
-        return patient["patient_message"] + "\n\nReply RESTART for a new assessment or DELETE ME to remove your data."
+        return assessment_complete_reply(patient)
 
+    # Triage
     if patient["status"] == "triage":
         qid = patient["current_question"]
         yes = parse_yes_no_number(text)
         if yes is None:
-            return "Please reply with 1 for Yes or 2 for No."
+            return tr(patient, "invalid_yes_no")
 
         apply_question_answer(patient, qid, yes)
 
+        # Immediate red at q1
         if qid == "q1" and yes:
             complete_assessment(patient)
             patient["risk"] = "red"
             patient["score"] = max(patient["score"], 5)
             patient["required_response"] = "Emergency pickup"
-            patient["patient_message"] = (
-                "Aya has flagged your assessment as urgent. "
-                "Please go to the nearest hospital or dial your local emergency number now. "
-                "A clinic has also been alerted."
-            )
-            return patient["patient_message"]
+            patient["patient_message"] = patient_message_from_risk(patient, "red")
+            return assessment_complete_reply(patient)
 
+        # Any score >=5 ends immediately
         if patient["score"] >= 5:
             complete_assessment(patient)
-            return patient["patient_message"]
+            return assessment_complete_reply(patient)
 
         next_q = next_question_after(qid)
         if next_q is None:
             complete_assessment(patient)
-            return patient["patient_message"]
+            return assessment_complete_reply(patient)
 
         patient["current_question"] = next_q
         patient["updated_at"] = now_iso()
-        return QUESTION_TEXT[next_q]
+        return qtext(patient, next_q)
 
-    return "Something went wrong. Reply RESTART to begin again."
+    return "Something went wrong. Reply HELP to begin again."
+
+def patient_message_deleted(patient):
+    lang = patient.get("language", "en") if patient else "en"
+    return TEXT.get(lang, TEXT["en"]).get("deleted", TEXT["en"]["deleted"])
 
 # ---------------------------------
-# Demo HTML: patient phone simulator
+# Demo HTML
 # ---------------------------------
 DEMO_HTML = """
 <!DOCTYPE html>
@@ -425,14 +687,11 @@ DEMO_HTML = """
             font-weight: bold;
         }
         .panel {
-            width: 390px;
+            width: 420px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 12px 32px rgba(0,0,0,0.14);
             padding: 20px;
-        }
-        .panel h3 {
-            margin-top: 0;
         }
         .state {
             margin-top: 16px;
@@ -465,7 +724,7 @@ DEMO_HTML = """
         <div class="phone">
             <div class="header">Aya - Antenatal Companion</div>
             <div id="chat" class="chat">
-                <div class="bubble bot">Welcome to Aya. Reply with your age in numbers only to begin.</div>
+                <div class="bubble bot">Patient sends the first message. Try: hello</div>
             </div>
             <div class="input-row">
                 <input id="messageInput" type="text" placeholder="Type message..." />
@@ -478,11 +737,12 @@ DEMO_HTML = """
             <div class="controls">
                 <label><strong>Patient phone number</strong></label>
                 <input id="phoneInput" type="text" value="+447700900123" />
-                <button onclick="quickSend('24')">Send age 24</button>
-                <button onclick="quickSend('30')">Send week 30</button>
+                <button onclick="quickSend('hello')">Send first message</button>
                 <button onclick="quickSend('1')">Send 1</button>
                 <button onclick="quickSend('2')">Send 2</button>
-                <button onclick="quickSend('restart')">Restart</button>
+                <button onclick="quickSend('24')">Send 24</button>
+                <button onclick="quickSend('30')">Send 30</button>
+                <button onclick="quickSend('help')">HELP</button>
                 <button onclick="quickSend('delete me')">Delete Me</button>
             </div>
             <div id="state" class="state">No patient state loaded yet.</div>
@@ -511,13 +771,15 @@ DEMO_HTML = """
 
             state.innerHTML = `
                 <strong>Phone:</strong> ${patient.phone}<br>
+                <strong>Language:</strong> ${patient.language ?? "Not set"}<br>
                 <strong>Age:</strong> ${patient.age ?? "Not set"}<br>
                 <strong>Pregnancy week:</strong> ${patient.pregnancy_week ?? "Unknown"}<br>
                 <strong>Status:</strong> ${patient.status}<br>
                 <strong>Current question:</strong> ${patient.current_question ?? "None"}<br>
                 <strong>Score:</strong> ${patient.score}<br>
                 <strong>Risk:</strong> ${patient.risk.toUpperCase()}<br>
-                <strong>Required response:</strong> ${patient.required_response}<br><br>
+                <strong>Required response:</strong> ${patient.required_response}<br>
+                <strong>Next due:</strong> ${patient.next_assessment_due ?? "Not set"}<br><br>
                 <strong>Symptoms:</strong><br>${symptoms || "None"}<br><br>
                 <strong>Risk factors:</strong><br>${riskFactors || "None"}
             `;
@@ -557,8 +819,7 @@ DEMO_HTML = """
 """
 
 # ---------------------------------
-# Simple built-in clinic dashboard
-# Your friend can replace this later
+# Clinic dashboard
 # ---------------------------------
 CLINIC_HTML = """
 <!DOCTYPE html>
@@ -593,7 +854,7 @@ CLINIC_HTML = """
 <body>
     <div class="wrap">
         <h1>Aya Clinic Dashboard</h1>
-        <div class="sub">View-only clinic dashboard showing patients, risk, symptoms, and required response.</div>
+        <div class="sub">View-only clinic dashboard showing patients, risk, symptoms, response required, and next due date.</div>
         <button onclick="loadPatients()">Refresh</button>
         <div style="height:16px;"></div>
         <div id="grid" class="grid"></div>
@@ -625,11 +886,13 @@ CLINIC_HTML = """
                 <div class="${cardClass(p.risk)}">
                     <h3>${(p.risk || "").toUpperCase()} risk</h3>
                     <div><strong>Phone:</strong> ${p.phone}</div>
+                    <div><strong>Language:</strong> ${p.language}</div>
                     <div><strong>Age:</strong> ${p.age ?? "Not set"}</div>
                     <div><strong>Pregnancy week:</strong> ${p.pregnancy_week ?? "Unknown"}</div>
                     <div><strong>Score:</strong> ${p.score}</div>
                     <div><strong>Required response:</strong> ${p.required_response}</div>
                     <div><strong>Status:</strong> ${p.status}</div>
+                    <div><strong>Next assessment due:</strong> ${p.next_assessment_due ?? "Not set"}</div>
                     <div class="muted"><strong>Updated:</strong> ${p.updated_at}</div>
                     <div style="margin-top:10px;"><strong>Symptoms:</strong><br>${pillList(p.symptoms)}</div>
                     <div style="margin-top:10px;"><strong>Risk factors:</strong><br>${pillList(p.risk_factors)}</div>

@@ -12,6 +12,40 @@ APP_SUBTITLE = "Antenatal Companion"
 patients = {}
 
 # ---------------------------------
+# Community health workers
+# ---------------------------------
+community_workers = [
+    {
+        "name": "Nurse Adaeze",
+        "zone": "Zone A",
+        "city": "Lagos",
+        "phone": "+2348012345601",
+        "status": "Online",
+    },
+    {
+        "name": "Midwife Kemi",
+        "zone": "Zone B",
+        "city": "Kano",
+        "phone": "+2348012345602",
+        "status": "Online",
+    },
+    {
+        "name": "Dr. Emeka",
+        "zone": "Zone C",
+        "city": "Abuja",
+        "phone": "+2348012345603",
+        "status": "Busy",
+    },
+    {
+        "name": "CHW Tola",
+        "zone": "Zone A",
+        "city": "Ibadan",
+        "phone": "+2348012345604",
+        "status": "Online",
+    },
+]
+
+# ---------------------------------
 # Language config
 # ---------------------------------
 LANGUAGES = {
@@ -34,42 +68,42 @@ TEXT = {
     "en": {
         "language_prompt": (
             "Welcome to Aya.\n"
-            "Choose your language:\n"
+            "Choose your language by replying with a number only:\n"
             "1. English\n"
             "2. Pidgin\n"
             "3. Hausa\n"
             "4. Yoruba\n"
             "5. Igbo"
         ),
-        "language_invalid": "Please reply with 1, 2, 3, 4, or 5 to choose a language.",
-        "registration_age": "Please reply with your age in years using numbers only.",
-        "registration_week": "Please reply with your pregnancy week using numbers only. If you do not know, reply 0.",
+        "language_invalid": "Please reply with a number only: 1, 2, 3, 4, or 5.",
+        "registration_age": "Please reply with your age in years using numbers only. Do not type words.",
+        "registration_week": "Please reply with your pregnancy week using numbers only. If you do not know, reply 0. Do not type words.",
         "invalid_age": "Please reply with your age using numbers only, for example: 24",
         "invalid_week": "Please reply with your pregnancy week using numbers only. If unknown, reply 0.",
-        "invalid_yes_no": "Please reply with 1 for Yes or 2 for No.",
+        "invalid_yes_no": "Please reply with numbers only: 1 for Yes or 2 for No.",
         "deleted": "Your data has been removed from Aya. If you message again, a new record will be created.",
-        "status_incomplete": "Your assessment is still in progress. Please continue answering the questions with numbers only.",
+        "status_incomplete": "Your assessment is still in progress. Please continue answering with numbers only.",
         "q1": (
-            "Q1. Are you experiencing any of these danger signs: heavy bleeding, fits/seizures, or blurred vision?\n"
-            "Reply:\n1. Yes\n2. No"
+            "Q1. Are you experiencing any of these danger signs: heavy bleeding, fits or seizures, or blurred vision?\n"
+            "Reply with a number only:\n1. Yes\n2. No"
         ),
-        "q2": "Q2. Are you having a severe constant headache?\nReply:\n1. Yes\n2. No",
-        "q3": "Q3. Do you have fever or chills?\nReply:\n1. Yes\n2. No",
-        "q4": "Q4. Is water leaking or has your fluid broken?\nReply:\n1. Yes\n2. No",
-        "q5": "Q5. Have you noticed reduced fetal movement?\nReply:\n1. Yes\n2. No",
-        "q6": "Q6. Do you have itchy hands or feet?\nReply:\n1. Yes\n2. No",
-        "q7": "Q7. Do you have severe pelvic or abdominal pain?\nReply:\n1. Yes\n2. No",
-        "q8": "Q8. Have you previously had pre-eclampsia or stillbirth?\nReply:\n1. Yes\n2. No",
-        "q9": "Q9. Do you have a history of hypertension (high blood pressure)?\nReply:\n1. Yes\n2. No",
-        "q10": "Q10. Do you have a history of diabetes?\nReply:\n1. Yes\n2. No",
-        "q11": "Q11. Are you younger than 18 or older than 35?\nReply:\n1. Yes\n2. No",
+        "q2": "Q2. Are you having a severe constant headache?\nReply with a number only:\n1. Yes\n2. No",
+        "q3": "Q3. Do you have fever or chills?\nReply with a number only:\n1. Yes\n2. No",
+        "q4": "Q4. Is water leaking or has your fluid broken?\nReply with a number only:\n1. Yes\n2. No",
+        "q5": "Q5. Have you noticed reduced fetal movement?\nReply with a number only:\n1. Yes\n2. No",
+        "q6": "Q6. Do you have itchy hands or feet?\nReply with a number only:\n1. Yes\n2. No",
+        "q7": "Q7. Do you have severe pelvic or abdominal pain?\nReply with a number only:\n1. Yes\n2. No",
+        "q8": "Q8. Have you previously had pre-eclampsia or stillbirth?\nReply with a number only:\n1. Yes\n2. No",
+        "q9": "Q9. Do you have a history of hypertension (high blood pressure)?\nReply with a number only:\n1. Yes\n2. No",
+        "q10": "Q10. Do you have a history of diabetes?\nReply with a number only:\n1. Yes\n2. No",
+        "q11": "Q11. Are you younger than 18 or older than 35?\nReply with a number only:\n1. Yes\n2. No",
         "patient_red": (
-            "Aya has flagged your assessment as urgent. Please go to the nearest hospital or dial your local emergency number now. "
+            "Aya has flagged your assessment as urgent. Dial 112 now for emergency help. "
             "A clinic has also been alerted."
         ),
         "patient_yellow": (
-            "Aya has completed your assessment. A clinic will phone you soon to follow up. "
-            "If your symptoms worsen before then, go to the nearest hospital."
+            "Aya has completed your assessment. A community health worker has been alerted and will phone you to assess your risk. "
+            "If your symptoms get worse, reply HELP for a new assessment."
         ),
         "patient_green": (
             "Aya has completed your assessment. You can continue routine antenatal care and monitor for new symptoms. "
@@ -84,34 +118,34 @@ TEXT = {
     "pidgin": {
         "language_prompt": (
             "Welcome to Aya.\n"
-            "Choose your language:\n"
+            "Choose your language by replying with number only:\n"
             "1. English\n"
             "2. Pidgin\n"
             "3. Hausa\n"
             "4. Yoruba\n"
             "5. Igbo"
         ),
-        "language_invalid": "Abeg reply 1, 2, 3, 4, or 5 to choose language.",
-        "registration_age": "Abeg reply your age for years with number only.",
-        "registration_week": "Abeg reply your pregnancy week with number only. If you no know am, reply 0.",
+        "language_invalid": "Abeg reply with number only: 1, 2, 3, 4, or 5.",
+        "registration_age": "Abeg reply your age for years with number only. No type words.",
+        "registration_week": "Abeg reply your pregnancy week with number only. If you no know am, reply 0. No type words.",
         "invalid_age": "Abeg reply your age with number only, example: 24",
         "invalid_week": "Abeg reply your pregnancy week with number only. If you no know am, reply 0.",
-        "invalid_yes_no": "Abeg reply 1 for Yes or 2 for No.",
+        "invalid_yes_no": "Abeg reply with number only: 1 for Yes or 2 for No.",
         "deleted": "Aya don remove your data. If you message again, we go create new record.",
         "status_incomplete": "Your assessment still dey go on. Abeg continue to answer with number only.",
-        "q1": "Q1. You dey get any danger sign like heavy bleeding, fits/seizures, or blurred vision?\nReply:\n1. Yes\n2. No",
-        "q2": "Q2. You get strong constant headache?\nReply:\n1. Yes\n2. No",
-        "q3": "Q3. You get fever or chills?\nReply:\n1. Yes\n2. No",
-        "q4": "Q4. Water dey leak or your fluid don break?\nReply:\n1. Yes\n2. No",
-        "q5": "Q5. You notice reduced fetal movement?\nReply:\n1. Yes\n2. No",
-        "q6": "Q6. Your hands or feet dey itch?\nReply:\n1. Yes\n2. No",
-        "q7": "Q7. You get serious pelvic or abdominal pain?\nReply:\n1. Yes\n2. No",
-        "q8": "Q8. You don get pre-eclampsia or stillbirth before?\nReply:\n1. Yes\n2. No",
-        "q9": "Q9. You get history of hypertension/high blood pressure?\nReply:\n1. Yes\n2. No",
-        "q10": "Q10. You get history of diabetes?\nReply:\n1. Yes\n2. No",
-        "q11": "Q11. You dey under 18 or over 35?\nReply:\n1. Yes\n2. No",
-        "patient_red": "Aya don flag your assessment as urgent. Abeg go nearest hospital or call emergency number now. Clinic don receive alert too.",
-        "patient_yellow": "Aya don complete your assessment. Clinic go call you soon. If your symptoms worsen before then, go nearest hospital.",
+        "q1": "Q1. You dey get any danger sign like heavy bleeding, fits or seizures, or blurred vision?\nReply with number only:\n1. Yes\n2. No",
+        "q2": "Q2. You get strong constant headache?\nReply with number only:\n1. Yes\n2. No",
+        "q3": "Q3. You get fever or chills?\nReply with number only:\n1. Yes\n2. No",
+        "q4": "Q4. Water dey leak or your fluid don break?\nReply with number only:\n1. Yes\n2. No",
+        "q5": "Q5. You notice reduced fetal movement?\nReply with number only:\n1. Yes\n2. No",
+        "q6": "Q6. Your hands or feet dey itch?\nReply with number only:\n1. Yes\n2. No",
+        "q7": "Q7. You get serious pelvic or abdominal pain?\nReply with number only:\n1. Yes\n2. No",
+        "q8": "Q8. You don get pre-eclampsia or stillbirth before?\nReply with number only:\n1. Yes\n2. No",
+        "q9": "Q9. You get history of hypertension or high blood pressure?\nReply with number only:\n1. Yes\n2. No",
+        "q10": "Q10. You get history of diabetes?\nReply with number only:\n1. Yes\n2. No",
+        "q11": "Q11. You dey under 18 or over 35?\nReply with number only:\n1. Yes\n2. No",
+        "patient_red": "Aya don flag your assessment as urgent. Dial 112 now for emergency help. Clinic don receive alert too.",
+        "patient_yellow": "Aya don complete your assessment. Community health worker don receive alert and dem go call you to assess your risk. If your symptoms worse, reply HELP for new assessment.",
         "patient_green": "Aya don complete your assessment. Continue routine antenatal care and watch for new symptoms. If warning signs show, look for medical help.",
         "reassess_prompt": "Reply HELP anytime to take another assessment.",
         "next_due": "Your next routine assessment dey due on {date}.",
@@ -122,34 +156,34 @@ TEXT = {
     "ha": {
         "language_prompt": (
             "Barka da zuwa Aya.\n"
-            "Zaɓi harshe:\n"
+            "Zaɓi harshe ta hanyar amsawa da lamba kawai:\n"
             "1. English\n"
             "2. Pidgin\n"
             "3. Hausa\n"
             "4. Yoruba\n"
             "5. Igbo"
         ),
-        "language_invalid": "Da fatan a amsa da 1, 2, 3, 4, ko 5 domin zaɓar harshe.",
-        "registration_age": "Da fatan a turo shekarunki da lambobi kaɗai.",
-        "registration_week": "Da fatan a turo makon ciki da lambobi kaɗai. Idan ba ki sani ba, ki turo 0.",
+        "language_invalid": "Da fatan a amsa da lamba kawai: 1, 2, 3, 4, ko 5.",
+        "registration_age": "Da fatan a turo shekarunki da lambobi kaɗai. Kada ki rubuta kalmomi.",
+        "registration_week": "Da fatan a turo makon ciki da lambobi kaɗai. Idan ba ki sani ba, ki turo 0. Kada ki rubuta kalmomi.",
         "invalid_age": "Da fatan a turo shekarunki da lambobi kaɗai, misali: 24",
         "invalid_week": "Da fatan a turo makon ciki da lambobi kaɗai. Idan ba ki sani ba, ki turo 0.",
-        "invalid_yes_no": "Da fatan a amsa da 1 don Eh ko 2 don A'a.",
+        "invalid_yes_no": "Da fatan a amsa da lambobi kaɗai: 1 don Eh ko 2 don A'a.",
         "deleted": "An cire bayananki daga Aya. Idan kika sake yin saƙo, za a ƙirƙiri sabon bayaninki.",
         "status_incomplete": "Tantancewarki na gudana. Da fatan ki ci gaba da amsawa da lambobi kaɗai.",
-        "q1": "Q1. Kina da wata alamar haɗari kamar zubar jini mai yawa, farfaɗiya, ko gani ya dusashe?\nAmsa:\n1. Eh\n2. A'a",
-        "q2": "Q2. Kina da matsanancin ciwon kai mai dorewa?\nAmsa:\n1. Eh\n2. A'a",
-        "q3": "Q3. Kina da zazzabi ko sanyi?\nAmsa:\n1. Eh\n2. A'a",
-        "q4": "Q4. Ruwa na fita ko ruwan ciki ya fashe?\nAmsa:\n1. Eh\n2. A'a",
-        "q5": "Q5. Kin lura motsin jariri ya ragu?\nAmsa:\n1. Eh\n2. A'a",
-        "q6": "Q6. Hannaye ko ƙafafunki na kaikayi?\nAmsa:\n1. Eh\n2. A'a",
-        "q7": "Q7. Kina da matsanancin ciwon ƙugu ko ciki?\nAmsa:\n1. Eh\n2. A'a",
-        "q8": "Q8. Kina da tarihin pre-eclampsia ko haihuwar gawa?\nAmsa:\n1. Eh\n2. A'a",
-        "q9": "Q9. Kina da tarihin hawan jini?\nAmsa:\n1. Eh\n2. A'a",
-        "q10": "Q10. Kina da tarihin ciwon sukari?\nAmsa:\n1. Eh\n2. A'a",
-        "q11": "Q11. Shekarunki kasa da 18 ne ko sama da 35?\nAmsa:\n1. Eh\n2. A'a",
-        "patient_red": "Aya ta gano gaggawa. Ki je asibiti mafi kusa ko ki kira lambar gaggawa yanzu. An kuma sanar da asibitin yankinku.",
-        "patient_yellow": "Aya ta kammala tantancewa. Asibiti zai kira ki nan ba da jimawa ba. Idan alamunki suka tsananta kafin lokacin, ki je asibiti mafi kusa.",
+        "q1": "Q1. Kina da wata alamar haɗari kamar zubar jini mai yawa, farfaɗiya, ko gani ya dusashe?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q2": "Q2. Kina da matsanancin ciwon kai mai dorewa?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q3": "Q3. Kina da zazzabi ko sanyi?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q4": "Q4. Ruwa na fita ko ruwan ciki ya fashe?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q5": "Q5. Kin lura motsin jariri ya ragu?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q6": "Q6. Hannaye ko ƙafafunki na kaikayi?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q7": "Q7. Kina da matsanancin ciwon ƙugu ko ciki?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q8": "Q8. Kina da tarihin pre-eclampsia ko haihuwar gawa?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q9": "Q9. Kina da tarihin hawan jini?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q10": "Q10. Kina da tarihin ciwon sukari?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "q11": "Q11. Shekarunki kasa da 18 ne ko sama da 35?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
+        "patient_red": "Aya ta gano gaggawa. Ki kira 112 yanzu don taimakon gaggawa. An kuma sanar da asibitin yankinku.",
+        "patient_yellow": "Aya ta kammala tantancewa. An sanar da ma'aikaciyar lafiyar al'umma kuma za ta kira ki don tantance haɗarinki. Idan alamunki suka tsananta, ki turo HELP don sabon tantancewa.",
         "patient_green": "Aya ta kammala tantancewa. Ki ci gaba da kula da ciki kamar kullum kuma ki lura da sababbin alamomi. Idan alamar haɗari ta bayyana, ki nemi taimakon lafiya.",
         "reassess_prompt": "A turo HELP a kowane lokaci don sake yin tantancewa.",
         "next_due": "Lokacin tantancewa ta gaba zai yi ranar {date}.",
@@ -160,34 +194,34 @@ TEXT = {
     "yo": {
         "language_prompt": (
             "Kaabo si Aya.\n"
-            "Yan ede re:\n"
+            "Yan ede re nipa fifi nomba nikan ranse:\n"
             "1. English\n"
             "2. Pidgin\n"
             "3. Hausa\n"
             "4. Yoruba\n"
             "5. Igbo"
         ),
-        "language_invalid": "Jowo fi 1, 2, 3, 4, tabi 5 ranse lati yan ede.",
-        "registration_age": "Jowo fi ori re ranse pelu nomba nikan.",
-        "registration_week": "Jowo fi ose oyun re ranse pelu nomba nikan. Ti o ko ba mo, fi 0 ranse.",
+        "language_invalid": "Jowo fi nomba nikan ranse: 1, 2, 3, 4, tabi 5.",
+        "registration_age": "Jowo fi ori re ranse pelu nomba nikan. Ma ko oro.",
+        "registration_week": "Jowo fi ose oyun re ranse pelu nomba nikan. Ti o ko ba mo, fi 0 ranse. Ma ko oro.",
         "invalid_age": "Jowo fi ori re ranse pelu nomba nikan, apere: 24",
         "invalid_week": "Jowo fi ose oyun re ranse pelu nomba nikan. Ti o ko ba mo, fi 0 ranse.",
-        "invalid_yes_no": "Jowo fi 1 fun Beni tabi 2 fun Beeko.",
+        "invalid_yes_no": "Jowo fi nomba nikan ranse: 1 fun Beni tabi 2 fun Beeko.",
         "deleted": "A ti pa data re nu kuro ninu Aya. Ti o ba tun fi ifiranse ranse, a o da akosile tuntun sile.",
         "status_incomplete": "Ayewo re n lo lowo. Jowo tesiwaju lati dahun pelu nomba nikan.",
-        "q1": "Q1. Se o n ni eyikeyi awon ami ewu wonyi: eje pupo, seizure, tabi iran to dinku?\nDahun:\n1. Beni\n2. Beeko",
-        "q2": "Q2. Se o n ni efori to lagbara ti ko n lo?\nDahun:\n1. Beni\n2. Beeko",
-        "q3": "Q3. Se o ni iba tabi otutu inu ara?\nDahun:\n1. Beni\n2. Beeko",
-        "q4": "Q4. Se omi n jo tabi fluid re ti fo?\nDahun:\n1. Beni\n2. Beeko",
-        "q5": "Q5. Se o ti se akiyesi pe gbigbe omo inu dinku?\nDahun:\n1. Beni\n2. Beeko",
-        "q6": "Q6. Se owo tabi ese re n yun?\nDahun:\n1. Beni\n2. Beeko",
-        "q7": "Q7. Se o n ni irora nla ni ikun tabi ibadi?\nDahun:\n1. Beni\n2. Beeko",
-        "q8": "Q8. Se o ti ni pre-eclampsia tabi stillbirth tele?\nDahun:\n1. Beni\n2. Beeko",
-        "q9": "Q9. Se o ni itan hypertension/tabi high blood pressure?\nDahun:\n1. Beni\n2. Beeko",
-        "q10": "Q10. Se o ni itan diabetes?\nDahun:\n1. Beni\n2. Beeko",
-        "q11": "Q11. Se ori re kere ju 18 tabi ju 35 lo?\nDahun:\n1. Beni\n2. Beeko",
-        "patient_red": "Aya ti fi ayewo re han gege bi pajawiri. Jowo lo si ile-iwosan to sunmo re tabi pe nomba emergency bayii. A tun ti kilo fun ile-iwosan agbegbe re.",
-        "patient_yellow": "Aya ti pari ayewo re. Ile-iwosan yoo pe e laipe. Ti aami aisan ba buru si, lo si ile-iwosan to sunmo re.",
+        "q1": "Q1. Se o n ni eyikeyi awon ami ewu wonyi: eje pupo, seizure, tabi iran to dinku?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q2": "Q2. Se o n ni efori to lagbara ti ko n lo?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q3": "Q3. Se o ni iba tabi otutu inu ara?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q4": "Q4. Se omi n jo tabi fluid re ti fo?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q5": "Q5. Se o ti se akiyesi pe gbigbe omo inu dinku?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q6": "Q6. Se owo tabi ese re n yun?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q7": "Q7. Se o n ni irora nla ni ikun tabi ibadi?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q8": "Q8. Se o ti ni pre-eclampsia tabi stillbirth tele?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q9": "Q9. Se o ni itan hypertension tabi high blood pressure?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q10": "Q10. Se o ni itan diabetes?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "q11": "Q11. Se ori re kere ju 18 tabi ju 35 lo?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
+        "patient_red": "Aya ti fi ayewo re han gege bi pajawiri. Jowo pe 112 bayii fun iranlowo pajawiri. A tun ti kilo fun ile-iwosan agbegbe re.",
+        "patient_yellow": "Aya ti pari ayewo re. A ti fi to community health worker leti, won a si pe e lati se ayewo ewu kikun. Ti aami aisan ba buru si, fi HELP ranse fun ayewo tuntun.",
         "patient_green": "Aya ti pari ayewo re. O le tesiwaju pelu itoju oyun deede ki o si maa wo awon aami tuntun. Ti aami ewu ba farahan, wa iranlowo ilera.",
         "reassess_prompt": "Fi HELP ranse nigbakugba lati tun se ayewo.",
         "next_due": "Ayewo deede to tele ye ni ojo {date}.",
@@ -198,34 +232,34 @@ TEXT = {
     "ig": {
         "language_prompt": (
             "Nnọọ na Aya.\n"
-            "Họrọ asụsụ gị:\n"
+            "Họrọ asụsụ gị site n'iji nọmba naanị zaa:\n"
             "1. English\n"
             "2. Pidgin\n"
             "3. Hausa\n"
             "4. Yoruba\n"
             "5. Igbo"
         ),
-        "language_invalid": "Biko zaa 1, 2, 3, 4, ma ọ bụ 5 iji họrọ asụsụ.",
-        "registration_age": "Biko ziga afọ gị site na nọmba naanị.",
-        "registration_week": "Biko ziga izu ime gị site na nọmba naanị. Ọ bụrụ na ị maghị, ziga 0.",
+        "language_invalid": "Biko zaa na nọmba naanị: 1, 2, 3, 4, ma ọ bụ 5.",
+        "registration_age": "Biko ziga afọ gị site na nọmba naanị. Ederela okwu.",
+        "registration_week": "Biko ziga izu ime gị site na nọmba naanị. Ọ bụrụ na ị maghị, ziga 0. Ederela okwu.",
         "invalid_age": "Biko ziga afọ gị site na nọmba naanị, dịka: 24",
         "invalid_week": "Biko ziga izu ime gị site na nọmba naanị. Ọ bụrụ na ị maghị, ziga 0.",
-        "invalid_yes_no": "Biko zaa 1 maka Ee ma ọ bụ 2 maka Mba.",
+        "invalid_yes_no": "Biko zaa na nọmba naanị: 1 maka Ee ma ọ bụ 2 maka Mba.",
         "deleted": "E wepụrụ data gị na Aya. Ọ bụrụ na ị ziga ozi ọzọ, a ga-emepụta ndekọ ọhụrụ.",
         "status_incomplete": "Nyocha gị ka na-aga. Biko gaa n'ihu na-aza site na nọmba naanị.",
-        "q1": "Q1. Ị na-enwe otu n'ime ihe ize ndụ ndị a: ọbara ọgbụgba ukwuu, seizure, ma ọ bụ anya na-adịghị ahụ nke ọma?\nZaa:\n1. Ee\n2. Mba",
-        "q2": "Q2. Ị na-enwe isi ọwụwa siri ike na-adịgide?\nZaa:\n1. Ee\n2. Mba",
-        "q3": "Q3. Ị nwere fever ma ọ bụ chills?\nZaa:\n1. Ee\n2. Mba",
-        "q4": "Q4. Mmiri na-apụta ma ọ bụ fluid agbajiela?\nZaa:\n1. Ee\n2. Mba",
-        "q5": "Q5. Ị chọpụtara na mmegharị nwa ebu n’afọ belatara?\nZaa:\n1. Ee\n2. Mba",
-        "q6": "Q6. Aka ma ọ bụ ụkwụ gị na-akọwa?\nZaa:\n1. Ee\n2. Mba",
-        "q7": "Q7. Ị na-enwe mgbu siri ike n’afọ ma ọ bụ n’akụkụ ikpere/ukwu?\nZaa:\n1. Ee\n2. Mba",
-        "q8": "Q8. Ị nwere akụkọ pre-eclampsia ma ọ bụ stillbirth tupu a?\nZaa:\n1. Ee\n2. Mba",
-        "q9": "Q9. Ị nwere akụkọ hypertension / high blood pressure?\nZaa:\n1. Ee\n2. Mba",
-        "q10": "Q10. Ị nwere akụkọ diabetes?\nZaa:\n1. Ee\n2. Mba",
-        "q11": "Q11. Afọ gị dị n'okpuru 18 ma ọ bụ karịa 35?\nZaa:\n1. Ee\n2. Mba",
-        "patient_red": "Aya achọpụtala na ọnọdụ a dị ngwa. Biko gaa ụlọ ọgwụ kacha nso ma ọ bụ kpọọ nọmba mberede ugbu a. A gwala ụlọ ọgwụ mpaghara gị kwa.",
-        "patient_yellow": "Aya emechala nyocha gị. Ụlọ ọgwụ ga-akpọ gị n’oge na-adịghị anya. Ọ bụrụ na mgbaàmà gị ka njọ tupu ahụ, gaa ụlọ ọgwụ kacha nso.",
+        "q1": "Q1. Ị na-enwe otu n'ime ihe ize ndụ ndị a: ọbara ọgbụgba ukwuu, seizure, ma ọ bụ anya na-adịghị ahụ nke ọma?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q2": "Q2. Ị na-enwe isi ọwụwa siri ike na-adịgide?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q3": "Q3. Ị nwere fever ma ọ bụ chills?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q4": "Q4. Mmiri na-apụta ma ọ bụ fluid agbajiela?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q5": "Q5. Ị chọpụtara na mmegharị nwa ebu n’afọ belatara?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q6": "Q6. Aka ma ọ bụ ụkwụ gị na-akọwa?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q7": "Q7. Ị na-enwe mgbu siri ike n’afọ ma ọ bụ n’akụkụ ikpere/ukwu?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q8": "Q8. Ị nwere akụkọ pre-eclampsia ma ọ bụ stillbirth tupu a?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q9": "Q9. Ị nwere akụkọ hypertension ma ọ bụ high blood pressure?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q10": "Q10. Ị nwere akụkọ diabetes?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "q11": "Q11. Afọ gị dị n'okpuru 18 ma ọ bụ karịa 35?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
+        "patient_red": "Aya achọpụtala na ọnọdụ a dị ngwa. Biko kpọọ 112 ugbu a maka enyemaka mberede. A gwala ụlọ ọgwụ mpaghara gị kwa.",
+        "patient_yellow": "Aya emechala nyocha gị. A gwaala onye ọrụ ahụike obodo, ọ ga-akpọkwa gị iji nyochaa ihe ize ndụ gị nke ọma. Ọ bụrụ na mgbaàmà gị ka njọ, zipu HELP maka nyocha ọhụrụ.",
         "patient_green": "Aya emechala nyocha gị. Ị nwere ike ịga n’ihu na nlekọta ime nkịtị ma leba anya na mgbaàmà ọhụrụ. Ọ bụrụ na ihe ize ndụ pụta, chọọ enyemaka ahụike.",
         "reassess_prompt": "Zipu HELP oge ọ bụla iji mee nyocha ọzọ.",
         "next_due": "Nyocha nkịtị na-esote gị ga-abụ na {date}.",
@@ -318,9 +352,9 @@ def risk_from_score(score: int) -> str:
 
 def required_response_from_risk(risk: str) -> str:
     if risk == "red":
-        return "Emergency pickup"
+        return "Emergency response"
     if risk == "yellow":
-        return "Phone call"
+        return "CHW phone assessment"
     return "Routine monitoring"
 
 
@@ -334,6 +368,48 @@ def patient_message_from_risk(patient, risk: str) -> str:
 
 def next_due_date():
     return (datetime.utcnow() + timedelta(days=14)).isoformat()
+
+
+def choose_chw(patient: dict):
+    online_workers = [w for w in community_workers if w["status"].lower() == "online"]
+    if online_workers:
+        return online_workers[0]
+    return community_workers[0] if community_workers else None
+
+
+def build_chw_alert_message(patient: dict) -> str:
+    symptoms = ", ".join(patient.get("symptoms", [])) or "None recorded"
+    risk_factors = ", ".join(patient.get("risk_factors", [])) or "None recorded"
+
+    return (
+        f"AYA ALERT: Medium-risk antenatal patient requires follow-up.\n"
+        f"Phone: {patient['phone']}\n"
+        f"Age: {patient.get('age', 'Not set')}\n"
+        f"Pregnancy week: {patient.get('pregnancy_week') if patient.get('pregnancy_week') is not None else 'Unknown'}\n"
+        f"Risk: {patient.get('risk', '').upper()}\n"
+        f"Symptoms: {symptoms}\n"
+        f"Risk factors: {risk_factors}\n"
+        f"Action: Please phone the patient and complete a fuller risk assessment."
+    )
+
+
+def apply_chw_alert(patient: dict):
+    if patient.get("risk") != "yellow":
+        patient["assigned_chw"] = None
+        patient["chw_alert_message"] = None
+        patient["chw_alert_sent_at"] = None
+        return
+
+    chw = choose_chw(patient)
+    if not chw:
+        patient["assigned_chw"] = None
+        patient["chw_alert_message"] = None
+        patient["chw_alert_sent_at"] = None
+        return
+
+    patient["assigned_chw"] = chw
+    patient["chw_alert_message"] = build_chw_alert_message(patient)
+    patient["chw_alert_sent_at"] = now_iso()
 
 
 def create_patient(phone: str) -> dict:
@@ -358,6 +434,9 @@ def create_patient(phone: str) -> dict:
         "last_completed_at": None,
         "next_assessment_due": None,
         "location": None,
+        "assigned_chw": None,
+        "chw_alert_message": None,
+        "chw_alert_sent_at": None,
     }
     patients[phone] = patient
     return patient
@@ -393,6 +472,9 @@ def clinic_row(patient: dict) -> dict:
         "next_assessment_due": patient["next_assessment_due"],
         "answers": patient["answers"],
         "location": patient["location"],
+        "assigned_chw": patient["assigned_chw"],
+        "chw_alert_message": patient["chw_alert_message"],
+        "chw_alert_sent_at": patient["chw_alert_sent_at"],
     }
 
 
@@ -448,6 +530,9 @@ def restart_assessment(patient: dict, keep_registration=True):
     patient["completed"] = False
     patient["updated_at"] = now_iso()
     patient["location"] = None
+    patient["assigned_chw"] = None
+    patient["chw_alert_message"] = None
+    patient["chw_alert_sent_at"] = None
     if not keep_registration:
         patient["language"] = None
         patient["age"] = None
@@ -461,9 +546,11 @@ def apply_question_answer(patient: dict, qid: str, yes: bool):
         patient["score"] += QUESTION_POINTS[qid]
         label = QUESTION_LABELS[qid]
         if qid in {"q1", "q2", "q3", "q4", "q5", "q6", "q7"}:
-            patient["symptoms"].append(label)
+            if label not in patient["symptoms"]:
+                patient["symptoms"].append(label)
         else:
-            patient["risk_factors"].append(label)
+            if label not in patient["risk_factors"]:
+                patient["risk_factors"].append(label)
 
     update_risk(patient)
 
@@ -476,11 +563,22 @@ def complete_assessment(patient: dict):
     patient["last_completed_at"] = now_iso()
     patient["next_assessment_due"] = next_due_date()
     update_risk(patient)
+    apply_chw_alert(patient)
 
 
 def assessment_complete_reply(patient):
     due_text = tr(patient, "next_due", date=format_due_date(patient["next_assessment_due"]))
-    return f"{patient['patient_message']}\n\n{due_text}\n{tr(patient, 'help_complete')}"
+
+    extra = ""
+    if patient.get("risk") == "yellow" and patient.get("assigned_chw") and patient.get("chw_alert_message"):
+        chw = patient["assigned_chw"]
+        extra = (
+            f"\n\nAlert sent to community health worker:\n"
+            f"{chw['name']} ({chw['phone']})\n\n"
+            f"Message sent:\n{patient['chw_alert_message']}"
+        )
+
+    return f"{patient['patient_message']}{extra}\n\n{due_text}\n{tr(patient, 'help_complete')}"
 
 
 def patient_message_deleted(patient):
@@ -584,12 +682,21 @@ def process_message(patient: dict, incoming_text: str) -> str:
             complete_assessment(patient)
             patient["risk"] = "red"
             patient["score"] = max(patient["score"], 5)
-            patient["required_response"] = "Emergency pickup"
+            patient["required_response"] = "Emergency response"
             patient["patient_message"] = patient_message_from_risk(patient, "red")
+            patient["assigned_chw"] = None
+            patient["chw_alert_message"] = None
+            patient["chw_alert_sent_at"] = None
             return assessment_complete_reply(patient)
 
         if patient["score"] >= 5:
             complete_assessment(patient)
+            patient["risk"] = "red"
+            patient["required_response"] = "Emergency response"
+            patient["patient_message"] = patient_message_from_risk(patient, "red")
+            patient["assigned_chw"] = None
+            patient["chw_alert_message"] = None
+            patient["chw_alert_sent_at"] = None
             return assessment_complete_reply(patient)
 
         next_q = next_question_after(qid)
@@ -648,13 +755,18 @@ def seed_patient(
         patient["current_question"] = "language"
 
     update_risk(patient)
+    if completed:
+        apply_chw_alert(patient)
+        if patient["risk"] == "red":
+            patient["assigned_chw"] = None
+            patient["chw_alert_message"] = None
+            patient["chw_alert_sent_at"] = None
     return patient
 
 
 def seed_demo_patients():
     patients.clear()
 
-    # 4 more "active" demo patients
     seed_patient("+2347000000001")
     seed_patient("+2347000000002", language="pidgin", status="registering_age")
     seed_patient("+2347000000003", language="ha", age=22, status="registering_week")
@@ -669,7 +781,6 @@ def seed_demo_patients():
         answers={"q2": True},
     )
 
-    # 6 seeded completed patients
     seed_patient(
         "+2347000000005",
         language="en",
@@ -1118,6 +1229,18 @@ CLINIC_HTML = """
             padding: 6px 8px;
         }
 
+        pre.alert-box {
+            background: #f8fbfa;
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: inherit;
+            font-size: 0.75rem;
+            line-height: 1.5;
+        }
+
         @media (max-width: 1000px) {
             .main {
                 grid-template-columns: 1fr;
@@ -1132,7 +1255,7 @@ CLINIC_HTML = """
     <header>
         <div>
             <h1>Aya Antenatal Companion</h1>
-            <p>Integrated patient simulator + clinic dashboard</p>
+            <p>Patient SMS simulator and clinic response dashboard</p>
         </div>
         <div class="clock" id="clock">--:--:--</div>
     </header>
@@ -1148,7 +1271,7 @@ CLINIC_HTML = """
                 </div>
                 <div class="phone-contact">
                     <div class="name">Aya Antenatal Companion</div>
-                    <div class="sub" id="patientTag">Select or enter a phone number</div>
+                    <div class="sub" id="patientTag">Enter a Nigerian phone number</div>
                 </div>
                 <div class="progress-wrap">
                     <div style="font-size:0.68rem;color:#86b5ad;">Assessment Progress <span id="progressText" style="float:right;">0%</span></div>
@@ -1157,24 +1280,26 @@ CLINIC_HTML = """
                     </div>
                 </div>
                 <div id="chat" class="chat">
-                    <div class="bubble bot">Type any message to start, or select one of the hardcoded demo patients on the right.</div>
+                    <div class="bubble bot">Type any message to start. Reply using numbers only for all multiple-choice questions.</div>
                 </div>
                 <div class="chat-input">
-                    <input id="phoneInput" value="+2347000000001" placeholder="Phone number" />
+                    <input id="phoneInput" value="+2347000000001" placeholder="+2348012345678" />
                 </div>
                 <div class="chat-input">
-                    <input id="messageInput" placeholder="Type message..." />
+                    <input id="messageInput" placeholder="Type message... use numbers only for multiple choice" />
                     <button class="send-btn" onclick="sendMessage()">Send</button>
+                </div>
+                <div class="chat-input">
+                    <button class="danger-btn" style="width:100%;" onclick="shareLocation()">Share emergency location</button>
                 </div>
             </div>
         </div>
 
         <div class="dashboard">
             <div class="toolbar">
-                <input id="lookupPhone" value="+2347000000001" placeholder="Load patient by phone" />
+                <input id="lookupPhone" value="+2347000000001" placeholder="+2348012345678" />
                 <button class="primary-btn" onclick="loadSinglePatient()">Load patient</button>
                 <button class="ghost-btn" onclick="refreshPatients()">Refresh dashboard</button>
-                <button class="danger-btn" onclick="shareLocation()">Share emergency location</button>
             </div>
 
             <div class="stats">
@@ -1216,13 +1341,14 @@ CLINIC_HTML = """
                     <tbody id="patientsTable"></tbody>
                 </table>
             </div>
+
             <div class="card">
                 <h3>Available Community Health Workers</h3>
                 <div style="display:flex;flex-direction:column;gap:10px;">
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
                         <div>
                             <div style="font-weight:700;">Nurse Adaeze</div>
-                            <div class="muted" style="font-size:0.72rem;">Zone A · Lagos</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone A · Lagos · +2348012345601</div>
                         </div>
                         <span class="pill green">Online</span>
                     </div>
@@ -1230,7 +1356,7 @@ CLINIC_HTML = """
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
                         <div>
                             <div style="font-weight:700;">Midwife Kemi</div>
-                            <div class="muted" style="font-size:0.72rem;">Zone B · Kano</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone B · Kano · +2348012345602</div>
                         </div>
                         <span class="pill green">Online</span>
                     </div>
@@ -1238,7 +1364,7 @@ CLINIC_HTML = """
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
                         <div>
                             <div style="font-weight:700;">Dr. Emeka</div>
-                            <div class="muted" style="font-size:0.72rem;">Zone C · Abuja</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone C · Abuja · +2348012345603</div>
                         </div>
                         <span class="pill yellow">Busy</span>
                     </div>
@@ -1246,7 +1372,7 @@ CLINIC_HTML = """
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
                         <div>
                             <div style="font-weight:700;">CHW Tola</div>
-                            <div class="muted" style="font-size:0.72rem;">Zone A · Ibadan</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone A · Ibadan · +2348012345604</div>
                         </div>
                         <span class="pill green">Online</span>
                     </div>
@@ -1333,6 +1459,14 @@ CLINIC_HTML = """
                 ? `${patient.location.latitude}, ${patient.location.longitude} (${patient.location.timestamp})`
                 : "Not shared";
 
+            const chwAssigned = patient.assigned_chw
+                ? `${patient.assigned_chw.name} · ${patient.assigned_chw.phone} · ${patient.assigned_chw.status}`
+                : "None";
+
+            const chwMessage = patient.chw_alert_message
+                ? patient.chw_alert_message.replaceAll("\\n", "<br>")
+                : "None";
+
             state.innerHTML = `
                 <strong>Phone:</strong> ${patient.phone}<br>
                 <strong>Language:</strong> ${patient.language ?? "Not set"}<br>
@@ -1344,9 +1478,12 @@ CLINIC_HTML = """
                 <strong>Risk:</strong> ${patient.risk.toUpperCase()}<br>
                 <strong>Required response:</strong> ${patient.required_response}<br>
                 <strong>Next due:</strong> ${patient.next_assessment_due ?? "Not set"}<br>
-                <strong>Location:</strong> ${location}<br><br>
+                <strong>Location:</strong> ${location}<br>
+                <strong>Assigned CHW:</strong> ${chwAssigned}<br>
+                <strong>CHW alert sent:</strong> ${patient.chw_alert_sent_at ?? "Not sent"}<br><br>
                 <strong>Symptoms:</strong><br>${symptoms || '<span class="muted">None</span>'}<br><br>
-                <strong>Risk factors:</strong><br>${riskFactors || '<span class="muted">None</span>'}
+                <strong>Risk factors:</strong><br>${riskFactors || '<span class="muted">None</span>'}<br><br>
+                <strong>CHW message:</strong><br>${chwMessage}
             `;
         }
 
@@ -1361,7 +1498,9 @@ CLINIC_HTML = """
                 return `
                     <div style="font-size:0.74rem;line-height:1.5;">
                         ${phoneLine}
-                        <div><span class="pill red">Emergency pickup</span></div>
+                        <div><span class="pill red">Emergency</span></div>
+                        <div><strong>Action:</strong> Patient told to dial 112</div>
+                        <div><strong>Clinic alerted:</strong> Yes</div>
                         <div><strong>Location:</strong> ${loc}</div>
                         <div class="row-actions" style="margin-top:6px;">
                            <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Open</button>
@@ -1370,12 +1509,17 @@ CLINIC_HTML = """
                 `;
             }
 
-           if (patient.risk === "yellow") {
+            if (patient.risk === "yellow") {
+                const chwText = patient.assigned_chw
+                    ? `${patient.assigned_chw.name} (${patient.assigned_chw.phone})`
+                    : "Not assigned";
+
                 return `
                     <div style="font-size:0.74rem;line-height:1.5;">
                         ${phoneLine}
                         <div><span class="pill yellow">Medium risk</span></div>
-                        <div><strong>Response:</strong> Phone call</div>
+                        <div><strong>Action:</strong> CHW text sent</div>
+                        <div><strong>Assigned:</strong> ${chwText}</div>
                         <div class="row-actions" style="margin-top:6px;">
                             <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Open</button>
                         </div>
@@ -1387,13 +1531,14 @@ CLINIC_HTML = """
                 <div style="font-size:0.74rem;line-height:1.5;">
                     ${phoneLine}
                     <div><span class="pill green">Routine monitoring</span></div>
+                    <div><strong>Action:</strong> Routine follow-up</div>
                     <div class="row-actions" style="margin-top:6px;">
                        <button class="ghost-btn" onclick="selectPatient('${patient.phone}')">Open</button>
                     </div>
                 </div>
             `;
-        }    
-        
+        }
+
         async function refreshPatients() {
             const response = await fetch("/api/patients");
             const data = await response.json();
@@ -1610,7 +1755,7 @@ def api_share_location():
 @app.route("/simulate-sms", methods=["POST"])
 def simulate_sms():
     data = request.get_json() or {}
-    phone = str(data.get("phone", "+2347000000001"))
+    phone = str(data.get("phone", "+2347000000001")).strip()
     body = str(data.get("body", ""))
 
     patient = patients.get(phone) or create_patient(phone)

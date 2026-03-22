@@ -58,14 +58,12 @@ By using SMS rather than a smartphone app, Aya is designed for accesibility, sca
 -built around constraints like limited transport access
 
 ## Tech Stack
-This prototype is built with:
--Python + Flask for the backend logic and routing
--HTML, CSS and Vanilla JavaScript for the patient simulator and clinic dashboard
--Twilio SMS webhook handling for inbound and outbound messaging logic
--In-memory data storage for rapid hackathon prototyping without a database
-
+- **Backend:** Python, Flask  
+- **Frontend:** HTML, CSS, Vanilla JavaScript  
+- **Messaging:** Twilio SMS API  
+- **Data:** In-memory storage (hackathon prototype)  
+- **Deployment:** Local + tunnelling (e.g. Cloudflare)  
 The app is currently designed as a single-file Flask prototype, making it fast to run, demo and iterate on during the hackathon.
-
 
 ## How to run
 1. Clone this repository

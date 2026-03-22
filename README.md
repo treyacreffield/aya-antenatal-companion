@@ -1,5 +1,5 @@
 # aya-antenatal-companion
-### SMS-based maternal health triage system for low-rescource setting
+### Aya is a zero-cost SMS platform that helps pregnant women recognise danger signs early and triggers real-world clinical response, without requiring internet or smartphones
 
 ## Problem
 Nigeria faces one of the highest maternal mortality rates in the world, with many deaths caused not only by lack of medical treatment, but by delays in deciding to seek care. In rural and low-resource communities, pregnant women may not recognise early danger signs such as headache, blurred vision, swelling or bleeding. These symptoms are often dismissed as normal pregnancy discomfort, malaria, or non-medical causes, which can delay urgent intervention. 

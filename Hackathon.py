@@ -7,9 +7,10 @@ APP_NAME = "Aya"
 APP_SUBTITLE = "Antenatal Companion"
 
 # ---------------------------------
-# In-memory patient store
+# In-memory stores
 # ---------------------------------
 patients = {}
+chw_assignment_index = 0
 
 # ---------------------------------
 # Community health workers
@@ -30,18 +31,18 @@ community_workers = [
         "status": "Online",
     },
     {
-        "name": "Dr. Emeka",
-        "zone": "Zone C",
-        "city": "Abuja",
-        "phone": "+2348012345603",
-        "status": "Busy",
-    },
-    {
         "name": "CHW Tola",
         "zone": "Zone A",
         "city": "Ibadan",
         "phone": "+2348012345604",
         "status": "Online",
+    },
+    {
+        "name": "Dr. Emeka",
+        "zone": "Zone C",
+        "city": "Abuja",
+        "phone": "+2348012345603",
+        "status": "Busy",
     },
 ]
 
@@ -102,8 +103,8 @@ TEXT = {
             "A clinic has also been alerted."
         ),
         "patient_yellow": (
-            "Aya has completed your assessment. A community health worker has been alerted and will phone you to assess your risk. "
-            "If your symptoms get worse, reply HELP for a new assessment."
+            "Aya has completed your assessment. A community health worker has been contacted and will call you soon. "
+            "Please keep your phone nearby and wait for their call."
         ),
         "patient_green": (
             "Aya has completed your assessment. You can continue routine antenatal care and monitor for new symptoms. "
@@ -145,7 +146,7 @@ TEXT = {
         "q10": "Q10. You get history of diabetes?\nReply with number only:\n1. Yes\n2. No",
         "q11": "Q11. You dey under 18 or over 35?\nReply with number only:\n1. Yes\n2. No",
         "patient_red": "Aya don flag your assessment as urgent. Dial 112 now for emergency help. Clinic don receive alert too.",
-        "patient_yellow": "Aya don complete your assessment. Community health worker don receive alert and dem go call you to assess your risk. If your symptoms worse, reply HELP for new assessment.",
+        "patient_yellow": "Aya don complete your assessment. Community health worker don receive alert and dem go call you soon. Abeg keep your phone near you and wait for their call.",
         "patient_green": "Aya don complete your assessment. Continue routine antenatal care and watch for new symptoms. If warning signs show, look for medical help.",
         "reassess_prompt": "Reply HELP anytime to take another assessment.",
         "next_due": "Your next routine assessment dey due on {date}.",
@@ -183,7 +184,7 @@ TEXT = {
         "q10": "Q10. Kina da tarihin ciwon sukari?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
         "q11": "Q11. Shekarunki kasa da 18 ne ko sama da 35?\nAmsa da lamba kawai:\n1. Eh\n2. A'a",
         "patient_red": "Aya ta gano gaggawa. Ki kira 112 yanzu don taimakon gaggawa. An kuma sanar da asibitin yankinku.",
-        "patient_yellow": "Aya ta kammala tantancewa. An sanar da ma'aikaciyar lafiyar al'umma kuma za ta kira ki don tantance haɗarinki. Idan alamunki suka tsananta, ki turo HELP don sabon tantancewa.",
+        "patient_yellow": "Aya ta kammala tantancewa. An sanar da ma'aikaciyar lafiyar al'umma kuma za ta kira ki nan ba da jimawa ba. Ki ajiye wayarki kusa da ke ki jira kiran.",
         "patient_green": "Aya ta kammala tantancewa. Ki ci gaba da kula da ciki kamar kullum kuma ki lura da sababbin alamomi. Idan alamar haɗari ta bayyana, ki nemi taimakon lafiya.",
         "reassess_prompt": "A turo HELP a kowane lokaci don sake yin tantancewa.",
         "next_due": "Lokacin tantancewa ta gaba zai yi ranar {date}.",
@@ -221,7 +222,7 @@ TEXT = {
         "q10": "Q10. Se o ni itan diabetes?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
         "q11": "Q11. Se ori re kere ju 18 tabi ju 35 lo?\nDahun pelu nomba nikan:\n1. Beni\n2. Beeko",
         "patient_red": "Aya ti fi ayewo re han gege bi pajawiri. Jowo pe 112 bayii fun iranlowo pajawiri. A tun ti kilo fun ile-iwosan agbegbe re.",
-        "patient_yellow": "Aya ti pari ayewo re. A ti fi to community health worker leti, won a si pe e lati se ayewo ewu kikun. Ti aami aisan ba buru si, fi HELP ranse fun ayewo tuntun.",
+        "patient_yellow": "Aya ti pari ayewo re. A ti fi to community health worker leti, won a si pe e laipe. Jowo je ki foonu re wa nitosi ki o si duro de ipe won.",
         "patient_green": "Aya ti pari ayewo re. O le tesiwaju pelu itoju oyun deede ki o si maa wo awon aami tuntun. Ti aami ewu ba farahan, wa iranlowo ilera.",
         "reassess_prompt": "Fi HELP ranse nigbakugba lati tun se ayewo.",
         "next_due": "Ayewo deede to tele ye ni ojo {date}.",
@@ -259,7 +260,7 @@ TEXT = {
         "q10": "Q10. Ị nwere akụkọ diabetes?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
         "q11": "Q11. Afọ gị dị n'okpuru 18 ma ọ bụ karịa 35?\nZaa site na nọmba naanị:\n1. Ee\n2. Mba",
         "patient_red": "Aya achọpụtala na ọnọdụ a dị ngwa. Biko kpọọ 112 ugbu a maka enyemaka mberede. A gwala ụlọ ọgwụ mpaghara gị kwa.",
-        "patient_yellow": "Aya emechala nyocha gị. A gwaala onye ọrụ ahụike obodo, ọ ga-akpọkwa gị iji nyochaa ihe ize ndụ gị nke ọma. Ọ bụrụ na mgbaàmà gị ka njọ, zipu HELP maka nyocha ọhụrụ.",
+        "patient_yellow": "Aya emechala nyocha gị. A gwaala onye ọrụ ahụike obodo, ọ ga-akpọkwa gị n'oge na-adịghị anya. Biko debe ekwentị gị nso ma chere oku ahụ.",
         "patient_green": "Aya emechala nyocha gị. Ị nwere ike ịga n’ihu na nlekọta ime nkịtị ma leba anya na mgbaàmà ọhụrụ. Ọ bụrụ na ihe ize ndụ pụta, chọọ enyemaka ahụike.",
         "reassess_prompt": "Zipu HELP oge ọ bụla iji mee nyocha ọzọ.",
         "next_due": "Nyocha nkịtị na-esote gị ga-abụ na {date}.",
@@ -370,11 +371,16 @@ def next_due_date():
     return (datetime.utcnow() + timedelta(days=14)).isoformat()
 
 
-def choose_chw(patient: dict):
+def choose_chw_round_robin():
+    global chw_assignment_index
+
     online_workers = [w for w in community_workers if w["status"].lower() == "online"]
-    if online_workers:
-        return online_workers[0]
-    return community_workers[0] if community_workers else None
+    if not online_workers:
+        return None
+
+    chosen = online_workers[chw_assignment_index % len(online_workers)]
+    chw_assignment_index += 1
+    return chosen
 
 
 def build_chw_alert_message(patient: dict) -> str:
@@ -400,7 +406,7 @@ def apply_chw_alert(patient: dict):
         patient["chw_alert_sent_at"] = None
         return
 
-    chw = choose_chw(patient)
+    chw = choose_chw_round_robin()
     if not chw:
         patient["assigned_chw"] = None
         patient["chw_alert_message"] = None
@@ -568,17 +574,7 @@ def complete_assessment(patient: dict):
 
 def assessment_complete_reply(patient):
     due_text = tr(patient, "next_due", date=format_due_date(patient["next_assessment_due"]))
-
-    extra = ""
-    if patient.get("risk") == "yellow" and patient.get("assigned_chw") and patient.get("chw_alert_message"):
-        chw = patient["assigned_chw"]
-        extra = (
-            f"\n\nAlert sent to community health worker:\n"
-            f"{chw['name']} ({chw['phone']})\n\n"
-            f"Message sent:\n{patient['chw_alert_message']}"
-        )
-
-    return f"{patient['patient_message']}{extra}\n\n{due_text}\n{tr(patient, 'help_complete')}"
+    return f"{patient['patient_message']}\n\n{due_text}\n{tr(patient, 'help_complete')}"
 
 
 def patient_message_deleted(patient):
@@ -765,7 +761,9 @@ def seed_patient(
 
 
 def seed_demo_patients():
+    global chw_assignment_index
     patients.clear()
+    chw_assignment_index = 0
 
     seed_patient("+2347000000001")
     seed_patient("+2347000000002", language="pidgin", status="registering_age")
@@ -1239,6 +1237,7 @@ CLINIC_HTML = """
             font-family: inherit;
             font-size: 0.75rem;
             line-height: 1.5;
+            margin-top: 8px;
         }
 
         @media (max-width: 1000px) {
@@ -1327,6 +1326,11 @@ CLINIC_HTML = """
             </div>
 
             <div class="card">
+                <h3>Community Worker Alert</h3>
+                <div id="chwAlertBox" class="state-box">No community worker alert for this patient.</div>
+            </div>
+
+            <div class="card">
                 <h3>Patients</h3>
                 <table>
                     <thead>
@@ -1363,18 +1367,18 @@ CLINIC_HTML = """
 
                     <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
                         <div>
-                            <div style="font-weight:700;">Dr. Emeka</div>
-                            <div class="muted" style="font-size:0.72rem;">Zone C · Abuja · +2348012345603</div>
-                        </div>
-                        <span class="pill yellow">Busy</span>
-                    </div>
-
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
-                        <div>
                             <div style="font-weight:700;">CHW Tola</div>
                             <div class="muted" style="font-size:0.72rem;">Zone A · Ibadan · +2348012345604</div>
                         </div>
                         <span class="pill green">Online</span>
+                    </div>
+
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#f8fbfa;">
+                        <div>
+                            <div style="font-weight:700;">Dr. Emeka</div>
+                            <div class="muted" style="font-size:0.72rem;">Zone C · Abuja · +2348012345603</div>
+                        </div>
+                        <span class="pill yellow">Busy</span>
                     </div>
                 </div>
             </div>
@@ -1440,12 +1444,14 @@ CLINIC_HTML = """
 
         function renderState(patient) {
             const state = document.getElementById("stateBox");
+            const chwAlertBox = document.getElementById("chwAlertBox");
             const progress = progressPercent(patient);
             document.getElementById("progressFill").style.width = progress + "%";
             document.getElementById("progressText").textContent = progress + "%";
 
             if (!patient) {
                 state.innerHTML = "Patient not found.";
+                chwAlertBox.innerHTML = "No community worker alert for this patient.";
                 document.getElementById("patientTag").textContent = "No active patient";
                 return;
             }
@@ -1463,10 +1469,6 @@ CLINIC_HTML = """
                 ? `${patient.assigned_chw.name} · ${patient.assigned_chw.phone} · ${patient.assigned_chw.status}`
                 : "None";
 
-            const chwMessage = patient.chw_alert_message
-                ? patient.chw_alert_message.replaceAll("\\n", "<br>")
-                : "None";
-
             state.innerHTML = `
                 <strong>Phone:</strong> ${patient.phone}<br>
                 <strong>Language:</strong> ${patient.language ?? "Not set"}<br>
@@ -1482,9 +1484,20 @@ CLINIC_HTML = """
                 <strong>Assigned CHW:</strong> ${chwAssigned}<br>
                 <strong>CHW alert sent:</strong> ${patient.chw_alert_sent_at ?? "Not sent"}<br><br>
                 <strong>Symptoms:</strong><br>${symptoms || '<span class="muted">None</span>'}<br><br>
-                <strong>Risk factors:</strong><br>${riskFactors || '<span class="muted">None</span>'}<br><br>
-                <strong>CHW message:</strong><br>${chwMessage}
+                <strong>Risk factors:</strong><br>${riskFactors || '<span class="muted">None</span>'}
             `;
+
+            if (patient.chw_alert_message && patient.assigned_chw) {
+                chwAlertBox.innerHTML = `
+                    <strong>Assigned worker:</strong> ${patient.assigned_chw.name}<br>
+                    <strong>Worker phone:</strong> ${patient.assigned_chw.phone}<br>
+                    <strong>Status:</strong> ${patient.assigned_chw.status}<br>
+                    <strong>Alert sent at:</strong> ${patient.chw_alert_sent_at ?? "Not sent"}<br>
+                    <pre class="alert-box">${patient.chw_alert_message}</pre>
+                `;
+            } else {
+                chwAlertBox.innerHTML = "No community worker alert for this patient.";
+            }
         }
 
         function buildResponseInfo(patient) {
